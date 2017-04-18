@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="newpost">
+        <form method="post">
+            <label>
+                <div>Videokameraets mærke:</div>
+                <input type="text" name="brand" value="{{brand}}">
+            </label>
+            <label>
+                <div>Videokameraets model:</div>
+                <input type="text" name="model" value="{{model}}">
+            </label>
+            <label>
+                <div>Beskrivelse af Videokameraet(ikke obligatorisk):</div>
+                <textarea name="description">{{description}}</textarea>
+            </label>
+            <!-- <label>
+                <div>Billede af lampen(ikke obligatorisk):</div>
+                <input type="file" name="image">
+            </label> -->
+            <div class="error">{{error}}</div>
+            <input type="submit">
+        </form>
+    </div>
+{% endblock %}

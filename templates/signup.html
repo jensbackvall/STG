@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Signup here:</h2>
+<form method="post">
+    <table>
+        <tbody>
+            <tr>
+                <td>Brugernavn</td>
+                <td>
+                    <input type="text" name="username" value="{{username}}">
+                </td>
+                <td class="error">{{username_error}}</td>
+            </tr>
+            <tr>
+                <td>Fornavn</td>
+                <td>
+                    <input type="text" name="firstname" value="{{firstname}}">
+                </td>
+                <td class="error">{{firstname_error}}</td>
+            </tr>
+            <tr>
+                <td>Efternavn</td>
+                <td>
+                    <input type="text" name="surname" value="{{surname}}">
+                </td>
+                <td class="error">{{surname_error}}</td>
+            </tr>
+            <tr>
+                <td>Password</td>
+                <td>
+                    <input type="password" name="password" value="">
+                </td>
+                <td class="error">{{password_error}}</td>
+            </tr>
+            <tr>
+                <td>Gentag Password</td>
+                <td>
+                    <input type="password" name="verify" value="">
+                </td>
+                <td class="error">{{verify_error}}</td>
+            </tr>
+            <tr>
+                <td>Email</td>
+                <td>
+                    <input type="text" name="email" value="{{email}}">
+                </td>
+                <td class="error">{{email_error}}</td>
+            </tr>
+            <tr>
+                <td>Telefonnummer</td>
+                <td>
+                    <input type="text" name="phone" value="{{phone}}">
+                </td>
+                <td class="error">{{phone_error}}</td>
+            </tr>
+        </tbody>
+    </table>
+    <input type="submit" value="Opret Bruger">
+</form>
+
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <br>
+    <div class="row">
+        <span class="page_heading">
+            <h1>STG medlemsliste</h1>
+        </span>
+    </div>
+    <div class="row">
+        <div class="eightypercent">
+            {% for m in members %}
+                Navn: {{ m.name }}
+                <br>
+                Email: {{ m.email }}
+                <br>
+                Telefon: {{ m.phone }}
+                <br>
+                <br>
+            {% endfor %}
+        </div>
+    </div>
+    <br>
+    <br>
+    <br>
+{% endblock %}

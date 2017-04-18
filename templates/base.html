@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>
+        STG
+    </title>
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="dropdown_menu_div">
+                <span>
+                    ME<br>
+                    NU
+                </span>
+                <div class="dropdown_content">
+                    {% if user.name %}
+                        <p><a href="/mypage">Min Side</a></p>
+                        <p><a href="/mypage/mythings">Mine Ting</a></p>
+                        <p><a href="">Søg efter Ting</a></p>
+                        <p><a href="">Ting jeg har lånt</a></p>
+                        <p><a href="/mypage/myprofile">Min Profil</a></p>
+                        <p><a href="">Grejbankens medlemmer</a></p>
+                    {% endif %}
+                    <p><a href="/mypage/login">Log ind</a></p>
+                    <p><a href="/mypage/signup">Opret bruger</a></p>
+                </div>
+            </div>
+            <div class="blog_title">
+                <a href="/">STG - Teknik- og Grejbank</a>
+            </div>
+            <div class="user_menu_div">
+                {% if user %}
+                    Bruger:{{ user.name }}
+                    <br>
+                    <a href="/mypage/logout">[log ud]</a>
+                {% else %}
+                    <a href="/mypage/login">[log ind]</a>
+                    <br>
+                    <a href="/mypage/signup">[opret bruger]</a>
+                {% endif %}
+            </div>
+        </div>
+        {% block content %}
+        {% endblock %}
+    </div>
+</body>
+</html>

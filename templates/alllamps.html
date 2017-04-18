@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <br>
+    <div class="row">
+        <div class="eightypercent">
+            <span class="page_heading">
+                <h1>Her er alle lamper</h1>
+            </span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="eightypercent">
+            <br>
+            {% for al in all_lamps %}
+                <hr>
+                <br>
+                Mærke: {{ al.brand }}
+                <br>
+                Pæretype: {{ al.lamptype }}
+                <br>
+                Lampetype: {{ al.lampmodeltype }}
+                <br>
+                Model: {{ al.model }}
+                <br>
+                Effekt: {{ al.watt }} Watt
+                <br>
+                Beskrivelse: {{ al.description }}
+                <br>
+                Ejer: {{ al.owner }}
+                <br>
+                <!-- Billede: {{ al.image }} -->
+                <br>
+                <hr>
+            {% endfor %}
+        </div>
+    </div>
+    <br><br><br><br>
+{% endblock %}

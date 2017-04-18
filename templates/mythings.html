@@ -1,0 +1,213 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <br>
+    <div class="row">
+        <div class="eightypercent">
+            <span class="page_heading">
+                <h1>Her er dine ting!</h1>
+            </span>
+        </div>
+        <div class="nineteenpercent">
+            <a href="/mypage/newthing">
+                <button type="button">
+                    Opret ny ting
+                </button>
+            </a>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="eightypercent">
+            <h2>Mine Lamper</h2>
+            {% for ml in my_lamps %}
+                <hr>
+                <br>
+                Mærke: {{ ml.brand }}
+                <br>
+                Pæretype: {{ ml.lamptype }}
+                <br>
+                Lampetype: {{ ml.lampmodeltype }}
+                <br>
+                Model: {{ ml.model }}
+                <br>
+                Effekt: {{ ml.watt }} Watt
+                <br>
+                Beskrivelse: {{ ml.description }}
+                <br>
+                <!-- Billede: {{ ml.image }} -->
+                <br>
+                <hr>
+            {% endfor %}
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="eightypercent">
+            <h2>Mine Kabler</h2>
+            {% for mc in my_cables %}
+                <hr>
+                <br>
+                Stiktype: {{ mc.connection }}
+                <br>
+                Længde: {{ mc.length }} meter
+                <br>
+                Beskrivelse: {{ mc.description }}
+                <br>
+                <!-- Billede: {{ mc.image }} -->
+                <br>
+                <hr>
+            {% endfor %}
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="eightypercent">
+            <h2>Mine Dæmpere</h2>
+            {% for md in my_dampers %}
+                <hr>
+                <br>
+                Mærke: {{ md.brand }}
+                <br>
+                Model: {{ md.model }}
+                <br>
+                Beskrivelse: {{ md.description }}
+                <br>
+                <!-- Billede: {{ md.image }} -->
+                <br>
+                <hr>
+            {% endfor %}
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="eightypercent">
+            <h2>Mine Lysmixere</h2>
+            {% for mlm in my_lightmixers %}
+                <hr>
+                <br>
+                Mærke: {{ mlm.brand }}
+                <br>
+                Model: {{ mlm.model }}
+                <br>
+                Beskrivelse: {{ mlm.description }}
+                <br>
+                <!-- Billede: {{ mlm.image }} -->
+                <br>
+                <hr>
+            {% endfor %}
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="eightypercent">
+            <h2>Mine Lydmixere</h2>
+            {% for msm in my_soundmixers %}
+                <hr>
+                <br>
+                Mærke: {{ msm.brand }}
+                <br>
+                Model: {{ msm.model }}
+                <br>
+                Beskrivelse: {{ msm.description }}
+                <br>
+                <!-- Billede: {{ msm.image }} -->
+                <br>
+                <hr>
+            {% endfor %}
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="eightypercent">
+            <h2>Mine Højtalere</h2>
+            {% for msp in my_speakers %}
+                <hr>
+                <br>
+                Mærke: {{ msp.brand }}
+                <br>
+                Model: {{ msp.model }}
+                <br>
+                Beskrivelse: {{ msp.description }}
+                <br>
+                <!-- Billede: {{ msp.image }} -->
+                <br>
+                <hr>
+            {% endfor %}
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="eightypercent">
+            <h2>Mine fotokameraer</h2>
+            {% for mpc in my_photocameras %}
+                <hr>
+                <br>
+                Mærke: {{ mpc.brand }}
+                <br>
+                Model: {{ mpc.model }}
+                <br>
+                Beskrivelse: {{ mpc.description }}
+                <br>
+                <!-- Billede: {{ mpc.image }} -->
+                <br>
+                <hr>
+            {% endfor %}
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="eightypercent">
+            <h2>Mine videokameraer</h2>
+            {% for mvc in my_videocameras %}
+                <hr>
+                <br>
+                Mærke: {{ mvc.brand }}
+                <br>
+                Model: {{ mvc.model }}
+                <br>
+                Beskrivelse: {{ mvc.description }}
+                <br>
+                <!-- Billede: {{ mvc.image }} -->
+                <br>
+                <hr>
+            {% endfor %}
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="eightypercent">
+            <h2>Mine scenografier</h2>
+            {% for msc in my_scenography %}
+                <hr>
+                <br>
+                Type: {{ msc.model }}
+                <br>
+                Beskrivelse: {{ msc.description }}
+                <br>
+                <!-- Billede: {{ msc.image }} -->
+                <br>
+                <hr>
+            {% endfor %}
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="eightypercent">
+            <h2>Mine kostumer</h2>
+            {% for mcs in my_costumes %}
+                <hr>
+                <br>
+                Type: {{ mcs.model }}
+                <br>
+                Beskrivelse: {{ mcs.description }}
+                <br>
+                <!-- Billede: {{ mcs.image }} -->
+                <br>
+                <hr>
+            {% endfor %}
+        </div>
+    </div>
+    <hr>
+    <br><br><br><br>
+{% endblock %}

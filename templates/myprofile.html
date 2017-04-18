@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <br>
+    <span class="yourpoetry">
+        <h1>Dine Profilinformationer</h1>
+    </span>
+    <br><br>
+    {% for m in my_profile %}
+        Profilnavn: {{ m.name }}
+        <br>
+        E-mail: {{ m.email }}
+        <br>
+        Telefonnummer: {{ m.phone }}
+        <br>
+        Password: {{ m.password }}
+    {% endfor %}
+{% endblock %}

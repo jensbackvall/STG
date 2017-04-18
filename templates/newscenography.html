@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="newpost">
+        <form method="post">
+            <label>
+                <div>Scenografiens type (obligatorisk):</div>
+                <input type="text" name="model" value="{{model}}">
+            </label>
+            <label>
+                <div>Beskrivelse af Scenografien (obligatorisk):</div>
+                <textarea name="description">{{description}}</textarea>
+            </label>
+            <!-- <label>
+                <div>Billede af lampen(ikke obligatorisk):</div>
+                <input type="file" name="image">
+            </label> -->
+            <div class="error">{{error}}</div>
+            <input type="submit">
+        </form>
+    </div>
+{% endblock %}

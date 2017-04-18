@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="newpost">
+        <form enctype="multipart/form-data" method="post">
+            <label>
+                <div>Lampens Mærke(skriv ukendt hvis du ikke kender mærket):</div>
+                <input type="text" name="brand" value="{{brand}}">
+            </label>
+            <label>
+                <div>Lampens Pæretype(vælg type):</div>
+                <select name="lamptype">
+                    <option value="LED">LED</option>
+                    <option value="gloedepare">glødepære</option>
+                    <option value="halogen">halogen</option>
+                    <option value="anden">anden</option>
+                </select>
+            </label>
+            <label>
+                <div>Lampens modeltype(vælg type):</div>
+                <select name="lampmodeltype">
+                    <option value="Flood">Flood</option>
+                    <option value="Fresnel">Fresnel</option>
+                    <option value="P.C. Pebble Convex">P.C. Pebble Convex</option>
+                    <option value="Profile">Profile</option>
+                    <option value="PAR(CAN)">PAR(CAN)</option>
+                </select>
+            </label>
+            <label>
+                <div>Lampens model(eks nummer, type el. lign.):</div>
+                <input type="text" name="model" value="{{model}}">
+            </label>
+            <label>
+                <div>Lampens effekt i Watt:</div>
+                <input type="number" name="watt" value="{{watt}}">
+            </label>
+            <label>
+                <div>Beskrivelse af lampen(ikke obligatorisk):</div>
+                <textarea name="description">{{description}}</textarea>
+            </label>
+            <!-- <label>
+                <div>Billede af lampen(ikke obligatorisk):</div>
+                <input type="file" name="image">
+            </label> -->
+            <div class="error">{{error}}</div>
+            <input type="submit">
+        </form>
+    </div>
+{% endblock %}

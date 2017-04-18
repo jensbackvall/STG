@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <br>
+    <div class="row">
+        <span class="page_heading">
+            <h1>Velkommen til din personlige side</h1>
+            <br>
+            <h1>DER SKAL IMPLEMENTERES AT DENNE SIDE FØRER TIL LOGIN HVIS INGEN ER LOGGET IND</h1>
+        </span>
+    </div>
+    <div class="row">
+        <div class="fiftypercent">
+            <a href="/mypage/mythings">
+                <h2>Mine Ting</h2>
+            </a>
+        </div>
+        <div class="fiftypercent">
+            <a href="/mypage/searchtype">
+                <h2>Søg efter Ting</h2>
+            </a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="thirtypercent">
+            <a href="/mypage/myprofile">
+                <h2>Min Profil</h2>
+            </a>
+        </div>
+        <div class="thirtypercent">
+            <a href="">
+                <h2>Ting jeg har lånt/booket</h2>
+            </a>
+        </div>
+        <div class="thirtypercent">
+            <a href="/mypage/members">
+               <h2>Grejbankens medlemmer</h2>
+            </a>
+        </div>
+    </div>
+
+{% endblock %}

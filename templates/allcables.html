@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <br>
+    <div class="row">
+        <div class="eightypercent">
+            <span class="page_heading">
+                <h1>Her er alle kabler</h1>
+            </span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="eightypercent">
+            <br>
+            {% for ac in all_cables %}
+                <hr>
+                <br>
+                Stiktype: {{ ac.connection }}
+                <br>
+                Længde: {{ ac.length }} meter
+                <br>
+                Beskrivelse: {{ ac.description }}
+                <br>
+                Ejer: {{ ac.owner }}
+                <br>
+                <!-- Billede: {{ ac.image }} -->
+                <br>
+                <hr>
+            {% endfor %}
+        </div>
+    </div>
+    <br><br><br><br>
+{% endblock %}

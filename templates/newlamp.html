@@ -19,11 +19,21 @@
             <label>
                 <div>Lampens modeltype(vælg type):</div>
                 <select name="lampmodeltype">
-                    <option value="Flood">Flood</option>
+                    <option value="Backdrop/Flood">Backdrop/Flood</option>
                     <option value="Fresnel">Fresnel</option>
                     <option value="P.C. Pebble Convex">P.C. Pebble Convex</option>
-                    <option value="Profile">Profile</option>
-                    <option value="PAR(CAN)">PAR(CAN)</option>
+                    <option value="Profilspot">Profilspot</option>
+                    <option value="Pinspot">Pinspot</option>
+                    <option value="PAR 64">PAR 64</option>
+                    <option value="PAR 56">PAR 56</option>
+                    <option value="PAR 38">PAR 38</option>
+                    <option value="PAR 16">PAR 16</option>
+                    <option value="LED Spot (RGB/RGBW/RGBA)">LED Spot (RGB/RGBW/RGBA)</option>
+                    <option value="LED Bar/Batten (RGB/RGBW/RGBA)">LED Bar/Batten (RGB/RGBW/RGBA)</option>
+                    <option value="Bevægehovede Wash">Bevægehovede Wash</option>
+                    <option value="Bevægehovede Beam">Bevægehovede Beam</option>
+                    <option value="Bevægehovede Profile">Bevægehovede Profile</option>
+                    <option value="Anden">Anden</option>
                 </select>
             </label>
             <label>
@@ -38,10 +48,6 @@
                 <div>Beskrivelse af lampen(ikke obligatorisk):</div>
                 <textarea name="description">{{description}}</textarea>
             </label>
-            <!-- <label>
-                <div>Billede af lampen(ikke obligatorisk):</div>
-                <input type="file" name="image">
-            </label> -->
             <div class="error">{{error}}</div>
             <input type="submit">
         </form>

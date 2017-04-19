@@ -12,8 +12,6 @@ from string import letters
 
 from google.appengine.ext import db
 
-from google.appengine.api import images
-
 template_dir = os.path.join(os.path.dirname(__file__), 'templates')
 jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir),
     autoescape = True)
@@ -140,13 +138,13 @@ class User(db.Model):
 class Lamp(db.Model):
     """class that creates the basic database structure for Lamp"""
     owner = db.StringProperty(required=True)
+    contact = db.PhoneNumberProperty(required=True)
     lamptype = db.StringProperty(required=True)
     lampmodeltype = db.StringProperty(required=True)
     brand = db.StringProperty(required=True)
     model = db.StringProperty(required=True)
     watt = db.IntegerProperty(required=True)
     description = db.TextProperty()
-    image = db.BlobProperty()
     booked = db.BooleanProperty()
 
 class Cable(db.Model):
@@ -155,7 +153,6 @@ class Cable(db.Model):
     connection = db.StringProperty(required=True)
     length = db.IntegerProperty(required=True)
     description = db.TextProperty()
-    image = db.BlobProperty()
     booked = db.BooleanProperty()
 
 class Damper(db.Model):
@@ -164,7 +161,6 @@ class Damper(db.Model):
     brand = db.StringProperty(required=True)
     model = db.StringProperty(required=True)
     description = db.TextProperty()
-    image = db.BlobProperty()
     booked = db.BooleanProperty()
 
 class LightMixer(db.Model):
@@ -173,7 +169,6 @@ class LightMixer(db.Model):
     brand = db.StringProperty(required=True)
     model = db.StringProperty(required=True)
     description = db.TextProperty()
-    image = db.BlobProperty()
     booked = db.BooleanProperty()
 
 class SoundMixer(db.Model):
@@ -182,7 +177,6 @@ class SoundMixer(db.Model):
     brand = db.StringProperty(required=True)
     model = db.StringProperty(required=True)
     description = db.TextProperty()
-    image = db.BlobProperty()
     booked = db.BooleanProperty()
 
 class Speaker(db.Model):
@@ -191,7 +185,6 @@ class Speaker(db.Model):
     brand = db.StringProperty(required=True)
     model = db.TextProperty(required=True)
     description = db.TextProperty()
-    image = db.BlobProperty()
     booked = db.BooleanProperty()
 
 class PhotoCamera(db.Model):
@@ -200,7 +193,6 @@ class PhotoCamera(db.Model):
     brand = db.StringProperty(required=True)
     model = db.TextProperty(required=True)
     description = db.TextProperty()
-    image = db.BlobProperty()
     booked = db.BooleanProperty()
 
 class VideoCamera(db.Model):
@@ -209,7 +201,6 @@ class VideoCamera(db.Model):
     brand = db.StringProperty(required=True)
     model = db.TextProperty(required=True)
     description = db.TextProperty()
-    image = db.BlobProperty()
     booked = db.BooleanProperty()
 
 class Scenography(db.Model):
@@ -217,7 +208,7 @@ class Scenography(db.Model):
     owner = db.StringProperty(required=True)
     model = db.TextProperty(required=True)
     description = db.TextProperty(required=True)
-    image = db.BlobProperty()
+    linktext = db.TextProperty()
     booked = db.BooleanProperty()
 
 class Costumes(db.Model):
@@ -225,7 +216,7 @@ class Costumes(db.Model):
     owner = db.StringProperty(required=True)
     model = db.TextProperty(required=True)
     description = db.TextProperty(required=True)
-    image = db.BlobProperty()
+    linktext = db.TextProperty()
     booked = db.BooleanProperty()
 
 
@@ -260,19 +251,19 @@ class NewLamp(Handler):
             return self.redirect("/mypage/login")
 
         owner = self.user.name
+        contact = self.user.phone
         brand = self.request.get("brand")
         lamptype = self.request.get("lamptype")
         lampmodeltype = self.request.get("lampmodeltype")
         model = self.request.get("model")
         watt = int(self.request.get("watt"))
-        # image = self.request.get("image")
         description = self.request.get("description")
 
         if not description:
             description = "Ingen beskrivelse er givet."
 
         if brand and model and watt:
-            l = Lamp(parent = blog_key(), owner = owner, brand = brand, lamptype = lamptype,
+            l = Lamp(parent = blog_key(), owner = owner, contact = contact, brand = brand, lamptype = lamptype,
                 lampmodeltype = lampmodeltype, model = model, watt = watt, description = description)
             l.put()
             time.sleep(0.1)
@@ -299,8 +290,6 @@ class NewCable(Handler):
         owner = self.user.name
         connection = self.request.get("connection")
         length = int(self.request.get("length"))
-        # image = self.request.get("image")
-        # image = images.resize(image, 32, 32)
         description = self.request.get("description")
 
         if not description:
@@ -335,8 +324,6 @@ class NewDamper(Handler):
         brand = self.request.get("brand")
         model = self.request.get("model")
         description = self.request.get("description")
-        # image = self.request.get("image")
-        # image = images.resize(image, 32, 32)
 
         if not description:
             description = "Ingen beskrivelse er givet."
@@ -370,8 +357,6 @@ class NewLightMixer(Handler):
         brand = self.request.get("brand")
         model = self.request.get("model")
         description = self.request.get("description")
-        # image = self.request.get("image")
-        # image = images.resize(image, 32, 32)
 
         if not description:
             description = "Ingen beskrivelse er givet."
@@ -405,8 +390,6 @@ class NewSoundMixer(Handler):
         brand = self.request.get("brand")
         model = self.request.get("model")
         description = self.request.get("description")
-        # image = self.request.get("image")
-        # image = images.resize(image, 32, 32)
 
         if not description:
             description = "Ingen beskrivelse er givet."
@@ -440,8 +423,6 @@ class NewSpeaker(Handler):
         brand = self.request.get("brand")
         model = self.request.get("model")
         description = self.request.get("description")
-        # image = self.request.get("image")
-        # image = images.resize(image, 32, 32)
 
         if not description:
             description = "Ingen beskrivelse er givet."
@@ -475,8 +456,6 @@ class NewPhotoCamera(Handler):
         brand = self.request.get("brand")
         model = self.request.get("model")
         description = self.request.get("description")
-        # image = self.request.get("image")
-        # image = images.resize(image, 32, 32)
 
         if not description:
             description = "Ingen beskrivelse er givet."
@@ -510,8 +489,6 @@ class NewVideoCamera(Handler):
         brand = self.request.get("brand")
         model = self.request.get("model")
         description = self.request.get("description")
-        # image = self.request.get("image")
-        # image = images.resize(image, 32, 32)
 
         if not description:
             description = "Ingen beskrivelse er givet."
@@ -544,15 +521,14 @@ class NewScenography(Handler):
         owner = self.user.name
         model = self.request.get("model")
         description = self.request.get("description")
-        # image = self.request.get("image")
-        # image = images.resize(image, 32, 32)
+        linktext = self.request.get("linktext")
 
         if not description:
             description = "Ingen beskrivelse er givet."
 
         if model and description:
             scy = Scenography(parent = blog_key(), owner = owner, model = model,
-                description = description)
+                description = description, linktext = linktext)
             scy.put()
             time.sleep(0.1)
             self.redirect("/mypage/mythings")
@@ -578,15 +554,14 @@ class NewCostume(Handler):
         owner = self.user.name
         model = self.request.get("model")
         description = self.request.get("description")
-        # image = self.request.get("image")
-        # image = images.resize(image, 32, 32)
+        linktext = self.request.get("linktext")
 
         if not description:
             description = "Ingen beskrivelse er givet."
 
         if model and description:
             cos = Costumes(parent = blog_key(), owner = owner, model = model,
-                description = description)
+                description = description, linktext = linktext)
             cos.put()
             time.sleep(0.1)
             self.redirect("/mypage/mythings")
@@ -992,7 +967,7 @@ class MainPage(Handler):
 class Members(Handler):
     """Class that renders a list of members"""
     def render_posts(self):
-        members = db.GqlQuery("""SELECT * FROM User""")
+        members = db.GqlQuery("""SELECT * FROM User ORDER BY firstname ASC""")
         self.render("members.html", members = members)
 
     def get(self):

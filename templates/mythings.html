@@ -185,8 +185,10 @@
                 <br>
                 Beskrivelse: {{ msc.description }}
                 <br>
-                <!-- Billede: {{ msc.image }} -->
-                <br>
+                {% if msc.linktext %}
+                    Link til billede: <a href="{{ msc.linktext }}">{{ msc.linktext }}</a>
+                    <br>
+                {% endif %}
                 <hr>
             {% endfor %}
         </div>
@@ -202,8 +204,10 @@
                 <br>
                 Beskrivelse: {{ mcs.description }}
                 <br>
-                <!-- Billede: {{ mcs.image }} -->
-                <br>
+                {% if mcs.linktext %}
+                    Link til billede: <a href="http://{{ mcs.linktext }}">{{ mcs.linktext }}</a>
+                    <br>
+                {% endif %}
                 <hr>
             {% endfor %}
         </div>

@@ -6,16 +6,25 @@
             <label>
                 <div>Kablets stiktype(hvis typen ikke findes, vælg anden og skriv den under beskrivelse):</div>
                 <select type="text" name="connection">
+                    <option value="mini-Jack 3,5 mm">mini-Jack 3,5 mm</option>
+                    <option value="400V, 16A CEE">400V, 16A CEE</option>
+                    <option value="400V, 32A CEE">400V, 32A CEE</option>
+                    <option value="400V, 63A CEE">400V, 63A CEE</option>
+                    <option value="400V, 125A CEE">400V, 125A CEE</option>
+                    <option value="400V, 16A Komfurstik">400V, 16A Komfurstik</option>
                     <option value="XLR">XLR</option>
                     <option value="DMX 5 pol">DMX 5 pol</option>
                     <option value="DMX 3 pol">DMX 3 pol</option>
                     <option value="Jack">Jack</option>
-                    <option value="mini-Jack 3,5 mm">mini-Jack 3,5 mm</option>
-                    <option value="16 A">16 A</option>
-                    <option value="32 A">32 A</option>
-                    <option value="63 A">63 A</option>
                     <option value="Phono">Phono</option>
+                    <option value="VGA">VGA</option>
+                    <option value="DvI">DvI</option>
                     <option value="HDMI">HDMI</option>
+                    <option value="Component">Component</option>
+                    <option value="SCART">SCART</option>
+                    <option value="Ethernet CAT5">Ethernet CAT5</option>
+                    <option value="Ethernet CAT5e">Ethernet CAT5e</option>
+                    <option value="Ethernet CAT6">Ethernet CAT6</option>
                     <option value="Anden">Anden</option>
                 </select>
             </label>
@@ -27,10 +36,6 @@
                 <div>Beskrivelse af kablet(ikke obligatorisk):</div>
                 <textarea name="description">{{description}}</textarea>
             </label>
-            <!-- <label>
-                <div>Billede af lampen(ikke obligatorisk):</div>
-                <input type="file" name="image">
-            </label> -->
             <div class="error">{{error}}</div>
             <input type="submit">
         </form>

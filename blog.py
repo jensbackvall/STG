@@ -657,23 +657,6 @@ class EditPost(Handler):
             return self.render('login.html', error=error)
 
 
-#Class for creating likes on blogposts
-class LikeHandler(Handler):
-    """class that handles likes for a blogpost, updating the posts number of
-     likes and the people who have liked it"""
-    def post(self, post_id):
-        key = db.Key.from_path('Posts', int(post_id), parent = blog_key())
-        p = db.get(key)
-
-        p.likes = p.likes + 1
-        p.likers.append(self.user.name)
-
-        if self.user.name != p.author:
-            p.put()
-            time.sleep(0.1)
-            self.redirect("/mypage")
-
-
 #Class for deleting blogposts
 class DeletePost(Handler):
     """class for deleting a blog post"""
@@ -689,104 +672,6 @@ class DeletePost(Handler):
             error = "You can only delete your own posts!"
             return self.render("login.html", error=error)
 
-
-#Database class for comments
-class Comment(db.Model):
-    """class that creates the basic database specifics for a comment"""
-    comment = db.TextProperty(required=True)
-    commentauthor = db.StringProperty(required=True)
-    commentid = db.IntegerProperty(required=True)
-    created = db.DateTimeProperty(auto_now_add=True)
-
-
-#Class for creating comments on blogposts
-class CreateComment(Handler):
-    """class that handles a new comment"""
-    def get(self, post_id):
-        key = db.Key.from_path('Posts', int(post_id), parent = blog_key())
-        p = db.get(key)
-
-        if self.user:
-            self.render("newcomment.html", p=p, subject=p.subject,
-                        content=p.content)
-        else:
-            error = "You need to be logged in to comment posts!"
-            return self.render('login.html', error=error)
-
-    def post(self, post_id):
-        key = db.Key.from_path('Posts', int(post_id), parent = blog_key())
-        p = db.get(key)
-
-        commentin = self.request.get("comment")
-        comment = commentin.replace('\n', '<br>')
-        commentauthor = self.user.name
-        commentid = int(p.key().id())
-
-        if self.user:
-            if commentauthor and comment and commentid:
-                c = Comment(parent = blog_key(), comment=comment,
-                            commentauthor=commentauthor, commentid = commentid)
-                c.put()
-                time.sleep(0.1)
-                self.redirect("/mypage")
-            else:
-                error = "You have to enter text in the comment field!"
-                return self.render("newcomment.html", p=p, subject=p.subject,
-                             content=p.content, error=error)
-
-#Class for editing comments on blogposts
-class EditComment(Handler):
-    """class that let's a user edit his or her own comment"""
-    def get(self, comment_id):
-        key = db.Key.from_path('Comment', int(comment_id), parent = blog_key())
-        c = db.get(key)
-
-        if not c:
-            self.error(404)
-            return self.render("404.html")
-
-        commented = c.comment.replace('<br>', '')
-
-        if self.user:
-            self.render("editcomment.html", c=c, commented=commented)
-        else:
-            error = "You need to be logged in to comment posts!"
-            return self.render('login.html', error=error)
-
-    def post(self, comment_id):
-        key = db.Key.from_path('Comment', int(comment_id), parent = blog_key())
-        c = db.get(key)
-
-        commentin = self.request.get("comment")
-        comment = commentin.replace('\n', '<br>')
-        commentid = c.commentid
-        commentauthor = c.commentauthor
-
-        if self.user:
-            if commentauthor and comment and commentid:
-                c.comment = comment
-                c.commentauthor = commentauthor
-                c.put()
-                time.sleep(0.1)
-                self.redirect("/mypage")
-            else:
-                error = "You have to enter text in the comment field!"
-                return self.render("editcomment.html", c=c, commented=c.comment)
-
-#Class for deleting comments on blogposts
-class DeleteComment(Handler):
-    """class for deleting a comment"""
-    def get(self, comment_id):
-        key = db.Key.from_path('Comment', int(comment_id), parent = blog_key())
-        c = db.get(key)
-
-        if self.user.name == c.commentauthor:
-            c.delete()
-            message = "Your Comment has been irrevocably DELETED!"
-            self.render("mypage.html", c=c, message = message)
-        else:
-            error = "You can only delete your own posts!"
-            return self.render("login.html", error=error)
 
 #class that handles personal page with all things ie lamps, cables etc
 class MyThings(Handler):
@@ -1048,10 +933,6 @@ app = webapp2.WSGIApplication([('/', Entrance),
                                ('/mypage/login', Login),
                                ('/mypage/logout', Logout),
                                ('/mypage/deleted/([0-9]+)', DeletePost),
-                               ('/mypage/newcomment/([0-9]+)', CreateComment),
-                               ('/mypage/editcomment/([0-9]+)',EditComment),
-                               ('/mypage/deletecomment/([0-9]+)', DeleteComment),
-                               ('/mypage/newlike/([0-9]+)', LikeHandler),
                                ('/mypage/mythings', MyThings),
                                ('/mypage/myprofile', MyProfile),
                                ('/mypage/newlamp', NewLamp),

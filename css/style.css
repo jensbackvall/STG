@@ -2,7 +2,7 @@ body {
     max-width: 800px;
     width: 100%;
     margin: 0 auto 0 auto;
-    font-family: courier;
+    font-family: helvetica;
     background-color: black;
     color: white;
 }
@@ -16,6 +16,10 @@ body {
     max-width: 80%;
     margin: auto;
     padding: auto;
+}
+
+.logoimg {
+    max-width: 200px;
 }
 
 .container {
@@ -176,6 +180,12 @@ input[type=submit] {
     width: 49%;
 }
 
+.fiftypercentright {
+    text-align: right;
+    display: inline-block;
+    width: 49%;
+}
+
 .thirtypercent {
     display: inline-block;
     width: 30%;
@@ -193,10 +203,10 @@ input[type=submit] {
     width: 19%;
 }
 
-/*.fivepercent {
+.ninepercent {
     display: inline-block;
-    width: 5%;
-}*/
+    width: 9%;
+}
 
 
 

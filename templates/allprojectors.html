@@ -5,39 +5,40 @@
     <div class="row">
         <div class="eightypercent">
             <span class="page_heading">
-                <h1>Her er alle højtalere</h1>
+                <h1>Her er alle projektorer</h1>
             </span>
         </div>
     </div>
     <div class="row">
         <div class="eightypercent">
             <br>
-            {% for asp in all_speakers %}
+            {% for ap in all_projectors %}
                 <hr>
                 <br>
-                {% if asp.active == "JA" %}
-                    Højtaleren er AKTIV
-                {% else %}
-                    Højtaleren er IKKE AKTIV
-                {% endif %}
+                Opløsning: {{ ap.resolution }}
                 <br>
-                Mærke: {{ asp.brand }}
+                Lysstyrke: {{ ap.lumen }} lumens
                 <br>
-                Model: {{ asp.model }}
+                Mærke: {{ ap.brand }}
                 <br>
-                Primær input: {{ asp.inputs }}
+                Model: {{ ap.model }}
                 <br>
-                Beskrivelse: {{ asp.description }}
+                Input 1: {{ ap.input1 }}
+                <br>
+                Input 2: {{ ap.input2 }}
+                <br>
+                Input 3: {{ ap.input3 }}
+                <br>
+                Beskrivelse: {{ ap.description }}
                 <br>
                 <br>
-                Ejer: {{ asp.owner }}
+                Ejer: {{ ap.owner }}
                 <br>
-                Kontaktnummer: {{ asp.contact }}
+                Kontaktnummer: {{ ap.contact }}
                 <br>
                 <br>
                 <hr>
             {% endfor %}
         </div>
     </div>
-    <br><br><br><br>
 {% endblock %}

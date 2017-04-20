@@ -5,34 +5,28 @@
     <div class="row">
         <div class="eightypercent">
             <span class="page_heading">
-                <h1>Her er alle højtalere</h1>
+                <h1>Her er alle videokameraer</h1>
             </span>
         </div>
     </div>
     <div class="row">
         <div class="eightypercent">
             <br>
-            {% for asp in all_speakers %}
+            {% for avc in all_videocameras %}
                 <hr>
                 <br>
-                {% if asp.active == "JA" %}
-                    Højtaleren er AKTIV
-                {% else %}
-                    Højtaleren er IKKE AKTIV
-                {% endif %}
+                Opløsning: {{ avc.resolution }}
                 <br>
-                Mærke: {{ asp.brand }}
+                Mærke: {{ avc.brand }}
                 <br>
-                Model: {{ asp.model }}
+                Model: {{ avc.model }}
                 <br>
-                Primær input: {{ asp.inputs }}
-                <br>
-                Beskrivelse: {{ asp.description }}
+                Beskrivelse: {{ avc.description }}
                 <br>
                 <br>
-                Ejer: {{ asp.owner }}
+                Ejer: {{ avc.owner }}
                 <br>
-                Kontaktnummer: {{ asp.contact }}
+                Kontaktnummer: {{ avc.contact }}
                 <br>
                 <br>
                 <hr>

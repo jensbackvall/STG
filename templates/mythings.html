@@ -15,9 +15,10 @@
                 </button>
             </a>
         </div>
+        <hr>
     </div>
-    <hr>
     <div class="row">
+        <div class="ninepercent"></div>
         <div class="eightypercent">
             <h2>Mine Lamper</h2>
             {% for ml in my_lamps %}
@@ -39,10 +40,12 @@
                 <br>
                 <hr>
             {% endfor %}
+            <hr>
         </div>
+        <div class="ninepercent"></div>
     </div>
-    <hr>
     <div class="row">
+        <div class="ninepercent"></div>
         <div class="eightypercent">
             <h2>Mine Kabler</h2>
             {% for mc in my_cables %}
@@ -58,10 +61,12 @@
                 <br>
                 <hr>
             {% endfor %}
+            <hr>
         </div>
+        <div class="ninepercent"></div>
     </div>
-    <hr>
     <div class="row">
+        <div class="ninepercent"></div>
         <div class="eightypercent">
             <h2>Mine Dæmpere</h2>
             {% for md in my_dampers %}
@@ -77,10 +82,12 @@
                 <br>
                 <hr>
             {% endfor %}
+            <hr>
         </div>
+        <div class="ninepercent"></div>
     </div>
-    <hr>
     <div class="row">
+        <div class="ninepercent"></div>
         <div class="eightypercent">
             <h2>Mine Lysmixere</h2>
             {% for mlm in my_lightmixers %}
@@ -96,10 +103,12 @@
                 <br>
                 <hr>
             {% endfor %}
+            <hr>
         </div>
+        <div class="ninepercent"></div>
     </div>
-    <hr>
     <div class="row">
+        <div class="ninepercent"></div>
         <div class="eightypercent">
             <h2>Mine Lydmixere</h2>
             {% for msm in my_soundmixers %}
@@ -109,16 +118,20 @@
                 <br>
                 Model: {{ msm.model }}
                 <br>
+                Kanaler: {{ msm.channels }}
+                <br>
                 Beskrivelse: {{ msm.description }}
                 <br>
                 <!-- Billede: {{ msm.image }} -->
                 <br>
                 <hr>
             {% endfor %}
+            <hr>
         </div>
+        <div class="ninepercent"></div>
     </div>
-    <hr>
     <div class="row">
+        <div class="ninepercent"></div>
         <div class="eightypercent">
             <h2>Mine Højtalere</h2>
             {% for msp in my_speakers %}
@@ -140,14 +153,33 @@
                 <br>
                 <hr>
             {% endfor %}
+            <hr>
         </div>
+        <div class="ninepercent"></div>
     </div>
-    <hr>
     <div class="row">
+        <div class="ninepercent"></div>
         <div class="eightypercent">
             <h2>Mine fotokameraer</h2>
             {% for mpc in my_photocameras %}
                 <hr>
+                <br>
+                {% if mpc.digianal == "digitalt" %}
+                    DIGITALT
+                {% else %}
+                    ANALOGT
+                {% endif %}
+                {% if mpc.slr == "JA" %}
+                    SPEJLREFLEKS fotokamera
+                {% else %}
+                    IKKE SPEJLREFLEKS fotokamera
+                {% endif %}
+                <br>
+                {% if mpc.vidnonvid == "JA" %}
+                    Kan filme video
+                {% else %}
+                    Kan IKKE filme video
+                {% endif %}
                 <br>
                 Mærke: {{ mpc.brand }}
                 <br>
@@ -155,18 +187,21 @@
                 <br>
                 Beskrivelse: {{ mpc.description }}
                 <br>
-                <!-- Billede: {{ mpc.image }} -->
                 <br>
                 <hr>
             {% endfor %}
+            <hr>
         </div>
+        <div class="ninepercent"></div>
     </div>
-    <hr>
     <div class="row">
+        <div class="ninepercent"></div>
         <div class="eightypercent">
             <h2>Mine videokameraer</h2>
             {% for mvc in my_videocameras %}
                 <hr>
+                <br>
+                Opløsning: {{ mvc.resolution }}
                 <br>
                 Mærke: {{ mvc.brand }}
                 <br>
@@ -174,14 +209,75 @@
                 <br>
                 Beskrivelse: {{ mvc.description }}
                 <br>
-                <!-- Billede: {{ mvc.image }} -->
                 <br>
                 <hr>
             {% endfor %}
+            <hr>
         </div>
+        <div class="ninepercent"></div>
     </div>
-    <hr>
     <div class="row">
+        <div class="ninepercent"></div>
+        <div class="eightypercent">
+            <h2>Mine projektorer</h2>
+            {% for mp in my_projectors %}
+                <hr>
+                <br>
+                Opløsning: {{ mp.resolution }}
+                <br>
+                Lysstyrke: {{ mp.lumen }} lumens
+                <br>
+                Mærke: {{ mp.brand }}
+                <br>
+                Model: {{ mp.model }}
+                <br>
+                Input 1: {{ mp.input1 }}
+                <br>
+                Input 2: {{ mp.input2 }}
+                <br>
+                Input 3: {{ mp.input3 }}
+                <br>
+                Beskrivelse: {{ mp.description }}
+                <br>
+                <br>
+                <hr>
+            {% endfor %}
+            <hr>
+        </div>
+        <div class="ninepercent"></div>
+    </div>
+    <div class="row">
+        <div class="ninepercent"></div>
+        <div class="eightypercent">
+            <h2>Mine TV/skærme</h2>
+            {% for mtv in my_tvs %}
+                <hr>
+                <br>
+                Opløsning: {{ mtv.resolution }}
+                <br>
+                Størrelse: {{ mtv.screensize }} tommer
+                <br>
+                Mærke: {{ mtv.brand }}
+                <br>
+                Model: {{ mtv.model }}
+                <br>
+                Input 1: {{ mtv.input1 }}
+                <br>
+                Input 2: {{ mtv.input2 }}
+                <br>
+                Input 3: {{ mtv.input3 }}
+                <br>
+                Beskrivelse: {{ mtv.description }}
+                <br>
+                <br>
+                <hr>
+            {% endfor %}
+            <hr>
+        </div>
+        <div class="ninepercent"></div>
+    </div>
+    <div class="row">
+        <div class="ninepercent"></div>
         <div class="eightypercent">
             <h2>Mine scenografier</h2>
             {% for msc in my_scenography %}
@@ -192,15 +288,17 @@
                 Beskrivelse: {{ msc.description }}
                 <br>
                 {% if msc.linktext %}
-                    Link til billede: <a href="{{ msc.linktext }}">{{ msc.linktext }}</a>
+                    Link til billede: <a href="http://{{ msc.linktext }}">{{ msc.linktext }}</a>
                     <br>
                 {% endif %}
                 <hr>
             {% endfor %}
+            <hr>
         </div>
+        <div class="ninepercent"></div>
     </div>
-    <hr>
     <div class="row">
+        <div class="ninepercent"></div>
         <div class="eightypercent">
             <h2>Mine kostumer</h2>
             {% for mcs in my_costumes %}
@@ -216,8 +314,8 @@
                 {% endif %}
                 <hr>
             {% endfor %}
+            <hr>
         </div>
+        <div class="ninepercent"></div>
     </div>
-    <hr>
-    <br><br><br><br>
 {% endblock %}

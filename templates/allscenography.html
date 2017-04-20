@@ -5,26 +5,29 @@
     <div class="row">
         <div class="eightypercent">
             <span class="page_heading">
-                <h1>Her er alle dæmpere</h1>
+                <h1>Her er alle scenografier</h1>
             </span>
         </div>
     </div>
     <div class="row">
         <div class="eightypercent">
             <br>
-            {% for ad in all_dampers %}
+            {% for asc in all_scenography %}
                 <hr>
                 <br>
-                Mærke: {{ ad.brand }}
+                Type: {{ asc.model }}
                 <br>
-                Model: {{ ad.model }}
+                Beskrivelse: {{ asc.description }}
                 <br>
-                Beskrivelse: {{ ad.description }}
+                {% if asc.linktext %}
+                    Link til billede: <a href="http://{{ asc.linktext }}">{{ asc.linktext }}</a>
+                {% endif %}
                 <br>
                 <br>
-                Ejer: {{ ad.owner }}
+                Ejer: {{ asc.owner }}
                 <br>
-                Kontaktnummer: {{ ad.contact }}
+                Kontaktnummer: {{ asc.contact }}
+                <br>
                 <br>
                 <hr>
             {% endfor %}

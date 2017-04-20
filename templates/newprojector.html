@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="newpost">
+        <form method="post">
+            <label>
+                <div>Projektorens mærke:</div>
+                <input type="text" name="brand" value="{{brand}}">
+            </label>
+            <label>
+                <div>Projektorens model:</div>
+                <input type="text" name="model" value="{{model}}">
+            </label>
+            <label>
+                <div>Projektorens opløsning:</div>
+                <select type="text" name="resolution">
+                    <option value="720p">720p</option>
+                    <option value="1080p">1080p</option>
+                    <option value="2K">2K</option>
+                    <option value="4K">4K</option>
+                    <option value="anden">anden</option>
+                </select>
+            </label>
+            <label>
+                <div>Projektorens lysstyrke i lumens:</div>
+                <input type="number" name="lumen" value="{{lumen}}">
+            </label>
+            <div>Ifyld så mange inputs du vil. Hvis der er flere, eller typen ikke er på listen, skriv det så i feltet Beskrivelse.</div>
+            <label>
+                <div>Input 1:</div>
+                <select type="text" name="input1">
+                    <option value="Phono">Phono</option>
+                    <option value="VGA">VGA</option>
+                    <option value="DvI">DvI</option>
+                    <option value="HDMI">HDMI</option>
+                    <option value="Component">Component</option>
+                    <option value="SCART">SCART</option>
+                    <option value="Anden">Anden</option>
+                </select>
+            </label>
+            <label>
+                <div>Input 2:</div>
+                <select type="text" name="input2">
+                    <option value="Phono">Phono</option>
+                    <option value="VGA">VGA</option>
+                    <option value="DvI">DvI</option>
+                    <option value="HDMI">HDMI</option>
+                    <option value="Component">Component</option>
+                    <option value="SCART">SCART</option>
+                    <option value="Anden">Anden</option>
+                </select>
+            </label>
+            <label>
+                <div>Input 3:</div>
+                <select type="text" name="input3">
+                    <option value="Phono">Phono</option>
+                    <option value="VGA">VGA</option>
+                    <option value="DvI">DvI</option>
+                    <option value="HDMI">HDMI</option>
+                    <option value="Component">Component</option>
+                    <option value="SCART">SCART</option>
+                    <option value="Anden">Anden</option>
+                </select>
+            </label>
+            <label>
+                <div>Beskrivelse af Projektor(ikke obligatorisk):</div>
+                <textarea name="description">{{description}}</textarea>
+            </label>
+            <div class="error">{{error}}</div>
+            <input type="submit">
+        </form>
+    </div>
+{% endblock %}

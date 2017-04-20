@@ -12,13 +12,19 @@
                 <input type="text" name="model" value="{{model}}">
             </label>
             <label>
+                <div>Videokameraets opløsning:</div>
+                <select type="text" name="resolution">
+                    <option value="720p">720p</option>
+                    <option value="1080p">1080p</option>
+                    <option value="2K">2K</option>
+                    <option value="4K">4K</option>
+                    <option value="anden">anden</option>
+                </select>
+            </label>
+            <label>
                 <div>Beskrivelse af Videokameraet(ikke obligatorisk):</div>
                 <textarea name="description">{{description}}</textarea>
             </label>
-            <!-- <label>
-                <div>Billede af lampen(ikke obligatorisk):</div>
-                <input type="file" name="image">
-            </label> -->
             <div class="error">{{error}}</div>
             <input type="submit">
         </form>

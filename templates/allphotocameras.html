@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <br>
+    <div class="row">
+        <div class="eightypercent">
+            <span class="page_heading">
+                <h1>Her er alle fotokameraer</h1>
+            </span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="eightypercent">
+            <br>
+            {% for apc in all_photocameras %}
+                <hr>
+                <br>
+                {% if apc.digianal == "digitalt" %}
+                    DIGITALT
+                {% else %}
+                    ANALOGT
+                {% endif %}
+                {% if apc.slr == "JA" %}
+                    SPEJLREFLEKS fotokamera
+                {% else %}
+                    IKKE SPEJLREFLEKS fotokamera
+                {% endif %}
+                <br>
+                {% if apc.vidnonvid == "JA" %}
+                    Kan filme video
+                {% else %}
+                    Kan IKKE filme video
+                {% endif %}
+                <br>
+                Mærke: {{ apc.brand }}
+                <br>
+                Model: {{ apc.model }}
+                <br>
+                Beskrivelse: {{ apc.description }}
+                <br>
+                <br>
+                Ejer: {{ apc.owner }}
+                <br>
+                Kontaktnummer: {{ apc.contact }}
+                <br>
+                <br>
+                <hr>
+            {% endfor %}
+        </div>
+    </div>
+    <br><br><br><br>
+{% endblock %}

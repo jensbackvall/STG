@@ -180,6 +180,7 @@ class SoundMixer(db.Model):
     contact = db.PhoneNumberProperty(required=True)
     brand = db.StringProperty(required=True)
     model = db.StringProperty(required=True)
+    channels = db.IntegerProperty()
     description = db.TextProperty()
     booked = db.BooleanProperty()
 
@@ -198,6 +199,9 @@ class PhotoCamera(db.Model):
     """class that creates the basic database structure for Camera"""
     owner = db.StringProperty(required=True)
     contact = db.PhoneNumberProperty(required=True)
+    digianal = db.StringProperty(required=True)
+    vidnonvid = db.StringProperty(required=True)
+    slr = db.StringProperty(required=True)
     brand = db.StringProperty(required=True)
     model = db.TextProperty(required=True)
     description = db.TextProperty()
@@ -208,7 +212,36 @@ class VideoCamera(db.Model):
     owner = db.StringProperty(required=True)
     contact = db.PhoneNumberProperty(required=True)
     brand = db.StringProperty(required=True)
+    resolution = db.StringProperty(required=True)
     model = db.TextProperty(required=True)
+    description = db.TextProperty()
+    booked = db.BooleanProperty()
+
+class Projector(db.Model):
+    """class that creates the basic database structure for Projector"""
+    owner = db.StringProperty(required=True)
+    contact = db.PhoneNumberProperty(required=True)
+    brand = db.StringProperty(required=True)
+    resolution = db.StringProperty(required=True)
+    lumen =db.IntegerProperty(required=True)
+    model = db.TextProperty(required=True)
+    input1 = db.StringProperty()
+    input2 = db.StringProperty()
+    input3 = db.StringProperty()
+    description = db.TextProperty()
+    booked = db.BooleanProperty()
+
+class TV(db.Model):
+    """class that creates the basic database structure for TV"""
+    owner = db.StringProperty(required=True)
+    contact = db.PhoneNumberProperty(required=True)
+    brand = db.StringProperty(required=True)
+    resolution = db.StringProperty(required=True)
+    screensize = db.IntegerProperty(required=True)
+    model = db.TextProperty(required=True)
+    input1 = db.StringProperty()
+    input2 = db.StringProperty()
+    input3 = db.StringProperty()
     description = db.TextProperty()
     booked = db.BooleanProperty()
 
@@ -404,14 +437,15 @@ class NewSoundMixer(Handler):
         contact = self.user.phone
         brand = self.request.get("brand")
         model = self.request.get("model")
+        channels = int(self.request.get("channels"))
         description = self.request.get("description")
 
         if not description:
             description = "Ingen beskrivelse er givet."
 
         if brand and model:
-            sm = SoundMixer(parent = blog_key(), owner = owner, contact = contact, brand = brand, model = model,
-                description = description)
+            sm = SoundMixer(parent = blog_key(), owner = owner, contact = contact, brand = brand,
+                 model = model, channels = channels, description = description)
             sm.put()
             time.sleep(0.1)
             self.redirect("/mypage/mythings")
@@ -473,6 +507,9 @@ class NewPhotoCamera(Handler):
         owner = self.user.name
         contact = self.user.phone
         brand = self.request.get("brand")
+        digianal = self.request.get("digianal")
+        vidnonvid = self.request.get("vidnonvid")
+        slr = self.request.get("slr")
         model = self.request.get("model")
         description = self.request.get("description")
 
@@ -480,15 +517,15 @@ class NewPhotoCamera(Handler):
             description = "Ingen beskrivelse er givet."
 
         if brand and model:
-            pc = PhotoCamera(parent = blog_key(), owner = owner, contact = contact, brand = brand, model = model,
-                description = description)
+            pc = PhotoCamera(parent = blog_key(), owner = owner, contact = contact, brand = brand,
+                model = model, digianal = digianal, slr = slr, vidnonvid = vidnonvid, description = description)
             pc.put()
             time.sleep(0.1)
             self.redirect("/mypage/mythings")
         else:
             error = "Du skal udfylde alle obligatorisk felter!"
-            return self.render("newphotocamera.html", brand = brand, model = model,
-                description = description, error = error)
+            return self.render("newphotocamera.html", brand = brand, model = model, slr = slr,
+                digianal = digianal, vidnonvid = vidnonvid, description = description, error = error)
 
 #Class below handles new instances of VIDEOCAMERA.
 class NewVideoCamera(Handler):
@@ -507,6 +544,7 @@ class NewVideoCamera(Handler):
         owner = self.user.name
         contact = self.user.phone
         brand = self.request.get("brand")
+        resolution = self.request.get("resolution")
         model = self.request.get("model")
         description = self.request.get("description")
 
@@ -514,15 +552,95 @@ class NewVideoCamera(Handler):
             description = "Ingen beskrivelse er givet."
 
         if brand and model:
-            vc = VideoCamera(parent = blog_key(), owner = owner, contact = contact, brand = brand, model = model,
-                description = description)
+            vc = VideoCamera(parent = blog_key(), owner = owner, contact = contact, brand = brand,
+                 model = model, resolution = resolution, description = description)
             vc.put()
             time.sleep(0.1)
             self.redirect("/mypage/mythings")
         else:
             error = "Du skal udfylde alle obligatorisk felter!"
             return self.render("newvideocamera.html", brand = brand, model = model,
-                description = description, error = error)
+                description = description, resolution = resolution, error = error)
+
+#Class below handles new instances of Projector.
+class NewProjector(Handler):
+    """class that renders a page for creating a new Projector instance"""
+    def get(self):
+        if self.user:
+            self.render("newprojector.html")
+        else:
+            error = "Du skal vaere logget ind for at oprette ting!"
+            self.render('login.html', error=error)
+
+    def post(self):
+        if not self.user:
+            return self.redirect("/mypage/login")
+
+        owner = self.user.name
+        contact = self.user.phone
+        brand = self.request.get("brand")
+        resolution = self.request.get("resolution")
+        lumen = int(self.request.get("lumen"))
+        model = self.request.get("model")
+        input1 = self.request.get("input1")
+        input2 = self.request.get("input2")
+        input3 = self.request.get("input3")
+        description = self.request.get("description")
+
+        if not description:
+            description = "Ingen beskrivelse er givet."
+
+        if brand and model and owner and contact and resolution and lumen:
+            pc = Projector(parent = blog_key(), owner = owner, contact = contact, brand = brand,
+                    model = model, input1 = input1, input2 = input2, input3 = input3,
+                    resolution = resolution, lumen = lumen, description = description)
+            pc.put()
+            time.sleep(0.1)
+            self.redirect("/mypage/mythings")
+        else:
+            error = "Du skal udfylde alle obligatorisk felter!"
+            return self.render("newprojector.html", brand = brand, model = model,
+                description = description, resolution = resolution, error = error)
+
+#Class below handles new instances of TV.
+class NewTV(Handler):
+    """class that renders a page for creating a new TV instance"""
+    def get(self):
+        if self.user:
+            self.render("newtv.html")
+        else:
+            error = "Du skal vaere logget ind for at oprette ting!"
+            self.render('login.html', error=error)
+
+    def post(self):
+        if not self.user:
+            return self.redirect("/mypage/login")
+
+        owner = self.user.name
+        contact = self.user.phone
+        brand = self.request.get("brand")
+        resolution = self.request.get("resolution")
+        screensize = int(self.request.get("screensize"))
+        model = self.request.get("model")
+        input1 = self.request.get("input1")
+        input2 = self.request.get("input2")
+        input3 = self.request.get("input3")
+        description = self.request.get("description")
+
+        if not description:
+            description = "Ingen beskrivelse er givet."
+
+        if brand and model and owner and contact and resolution and screensize:
+            tv = TV(parent = blog_key(), owner = owner, contact = contact, brand = brand,
+                    model = model, input1 = input1, input2 = input2, input3 = input3,
+                    resolution = resolution, screensize = screensize, description = description)
+            tv.put()
+            time.sleep(0.1)
+            self.redirect("/mypage/mythings")
+        else:
+            error = "Du skal udfylde alle obligatorisk felter!"
+            return self.render("newtv.html", brand = brand, model = model,
+                description = description, resolution = resolution, screensize = screensize, error = error)
 
 #Class below handles new instances of SCENOGRAPHY.
 class NewScenography(Handler):
@@ -604,7 +722,7 @@ class SearchType(Handler):
             self.render('login.html', error=error)
 
 
-#Class for shoeing a newly created blogpost.
+#Class for showing a newly created blogpost.
 class PostHandler(Handler):
     """class that shows a newly created blog post"""
     def get(self, post_id):
@@ -686,12 +804,14 @@ class MyThings(Handler):
         my_speakers = db.GqlQuery("""SELECT * FROM Speaker WHERE owner = :u""", u=u)
         my_photocameras = db.GqlQuery("""SELECT * FROM PhotoCamera WHERE owner = :u""", u=u)
         my_videocameras = db.GqlQuery("""SELECT * FROM VideoCamera WHERE owner = :u""", u=u)
+        my_projectors = db.GqlQuery("""SELECT * FROM Projector WHERE owner = :u""", u=u)
+        my_tvs = db.GqlQuery("""SELECT * FROM TV WHERE owner = :u""", u=u)
         my_scenography = db.GqlQuery("""SELECT * FROM Scenography WHERE owner = :u""", u=u)
         my_costumes = db.GqlQuery("""SELECT * FROM Costumes WHERE owner = :u""", u=u)
         self.render("mythings.html", my_lamps = my_lamps, my_cables = my_cables, my_dampers = my_dampers,
             my_lightmixers = my_lightmixers, my_soundmixers = my_soundmixers, my_speakers = my_speakers,
             my_photocameras = my_photocameras, my_videocameras = my_videocameras, my_scenography = my_scenography,
-            my_costumes = my_costumes)
+            my_costumes = my_costumes, my_projectors = my_projectors, my_tvs = my_tvs)
 
     def get(self):
         self.render_posts()
@@ -753,6 +873,66 @@ class AllSpeakers(Handler):
     def render_posts(self):
         all_speakers = db.GqlQuery("""SELECT * FROM Speaker""")
         self.render("allspeakers.html", all_speakers = all_speakers)
+
+    def get(self):
+        self.render_posts()
+
+#class that handles a page with all photocameras
+class AllPhotoCameras(Handler):
+    """class that handles all photocameras, showing them all on one page"""
+    def render_posts(self):
+        all_photocameras = db.GqlQuery("""SELECT * FROM PhotoCamera ORDER BY digianal""")
+        self.render("allphotocameras.html", all_photocameras = all_photocameras)
+
+    def get(self):
+        self.render_posts()
+
+#class that handles a page with all videocameras
+class AllVideoCameras(Handler):
+    """class that handles all videocameras, showing them all on one page"""
+    def render_posts(self):
+        all_videocameras = db.GqlQuery("""SELECT * FROM VideoCamera ORDER BY resolution""")
+        self.render("allvideocameras.html", all_videocameras = all_videocameras)
+
+    def get(self):
+        self.render_posts()
+
+#class that handles a page with all projectors
+class AllProjectors(Handler):
+    """class that handles all projectors, showing them all on one page"""
+    def render_posts(self):
+        all_projectors = db.GqlQuery("""SELECT * FROM Projector ORDER BY resolution""")
+        self.render("allprojectors.html", all_projectors = all_projectors)
+
+    def get(self):
+        self.render_posts()
+
+#class that handles a page with all tvs
+class AllTVs(Handler):
+    """class that handles all tvs, showing them all on one page"""
+    def render_posts(self):
+        all_tvs = db.GqlQuery("""SELECT * FROM TV ORDER BY resolution""")
+        self.render("alltvs.html", all_tvs = all_tvs)
+
+    def get(self):
+        self.render_posts()
+
+#class that handles a page with all scenography
+class AllScenography(Handler):
+    """class that handles all scenography, showing them all on one page"""
+    def render_posts(self):
+        all_scenography = db.GqlQuery("""SELECT * FROM Scenography""")
+        self.render("allscenography.html", all_scenography = all_scenography)
+
+    def get(self):
+        self.render_posts()
+
+#class that handles a page with all costumes
+class AllCostumes(Handler):
+    """class that handles all costumes, showing them all on one page"""
+    def render_posts(self):
+        all_costumes = db.GqlQuery("""SELECT * FROM Costumes""")
+        self.render("allcostumes.html", all_costumes = all_costumes)
 
     def get(self):
         self.render_posts()
@@ -943,6 +1123,8 @@ app = webapp2.WSGIApplication([('/', Entrance),
                                ('/mypage/newspeaker', NewSpeaker),
                                ('/mypage/newphotocamera', NewPhotoCamera),
                                ('/mypage/newvideocamera', NewVideoCamera),
+                               ('/mypage/newprojector', NewProjector),
+                               ('/mypage/newtv', NewTV),
                                ('/mypage/newscenography', NewScenography),
                                ('/mypage/newcostume', NewCostume),
                                ('/mypage/members', Members),
@@ -952,7 +1134,13 @@ app = webapp2.WSGIApplication([('/', Entrance),
                                ('/mypage/alldampers', AllDampers),
                                ('/mypage/alllightmixers', AllLightMixers),
                                ('/mypage/allsoundmixers', AllSoundMixers),
-                               ('/mypage/allspeakers', AllSpeakers)
+                               ('/mypage/allspeakers', AllSpeakers),
+                               ('/mypage/allphotocameras', AllPhotoCameras),
+                               ('/mypage/allvideocameras', AllVideoCameras),
+                               ('/mypage/allprojectors', AllProjectors),
+                               ('/mypage/alltvs', AllTVs),
+                               ('/mypage/allscenography', AllScenography),
+                               ('/mypage/allcostumes', AllCostumes)
                              ],
                              debug=True)
 

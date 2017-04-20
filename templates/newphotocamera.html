@@ -12,13 +12,30 @@
                 <input type="text" name="model" value="{{model}}">
             </label>
             <label>
+                <div>Digitalt eller analogt kamera?:</div>
+                <select type="text" name="digianal">
+                    <option value="digitalt">digitalt</option>
+                    <option value="analogt">analogt</option>
+                </select>
+            </label>
+            <label>
+                <div>Er det et spejlreflekskamera:</div>
+                <select type="text" name="slr">
+                    <option value="JA">JA</option>
+                    <option value="NEJ">NEJ</option>
+                </select>
+            </label>
+            <label>
+                <div>Kan kameraet filme video?:</div>
+                <select type="text" name="vidnonvid">
+                    <option value="JA">JA</option>
+                    <option value="NEJ">NEJ</option>
+                </select>
+            </label>
+            <label>
                 <div>Beskrivelse af Fotokameraet(ikke obligatorisk):</div>
                 <textarea name="description">{{description}}</textarea>
             </label>
-            <!-- <label>
-                <div>Billede af lampen(ikke obligatorisk):</div>
-                <input type="file" name="image">
-            </label> -->
             <div class="error">{{error}}</div>
             <input type="submit">
         </form>

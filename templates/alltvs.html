@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <br>
+    <div class="row">
+        <div class="eightypercent">
+            <span class="page_heading">
+                <h1>Her er alle projektorer</h1>
+            </span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="eightypercent">
+            <br>
+            {% for atv in all_tvs %}
+                <hr>
+                <br>
+                Opløsning: {{ atv.resolution }}
+                <br>
+                Størrelse: {{ atv.screensize }} tommer
+                <br>
+                Mærke: {{ atv.brand }}
+                <br>
+                Model: {{ atv.model }}
+                <br>
+                Input 1: {{ atv.input1 }}
+                <br>
+                Input 2: {{ atv.input2 }}
+                <br>
+                Input 3: {{ atv.input3 }}
+                <br>
+                Beskrivelse: {{ atv.description }}
+                <br>
+                <br>
+                Ejer: {{ atv.owner }}
+                <br>
+                Kontaktnummer: {{ atv.contact }}
+                <br>
+                <br>
+                <hr>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

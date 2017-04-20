@@ -5,31 +5,25 @@
     <div class="row">
         <div class="eightypercent">
             <span class="page_heading">
-                <h1>Her er alle lamper</h1>
+                <h1>Her er alle lydmixere</h1>
             </span>
         </div>
     </div>
     <div class="row">
         <div class="eightypercent">
             <br>
-            {% for al in all_lamps %}
+            {% for asm in all_soundmixers %}
                 <hr>
                 <br>
-                Lampetype: {{ al.lampmodeltype }}
+                Mærke: {{ asm.brand }}
                 <br>
-                Mærke: {{ al.brand }}
+                Model: {{ asm.model }}
                 <br>
-                Pæretype: {{ al.lamptype }}
+                Beskrivelse: {{ asm.description }}
                 <br>
-                Model: {{ al.model }}
+                Ejer: {{ asm.owner }}
                 <br>
-                Effekt: {{ al.watt }} Watt
-                <br>
-                Beskrivelse: {{ al.description }}
-                <br>
-                Ejer: {{ al.owner }}
-                <br>
-                Kontaktnummer: {{ al.contact }}
+                Kontaktnummer: {{ asm.contact }}
                 <br>
                 <hr>
             {% endfor %}

@@ -12,13 +12,27 @@
                 <input type="text" name="model" value="{{model}}">
             </label>
             <label>
+                <div>Er højteleren aktiv?:</div>
+                    <select type="text" name="active">
+                        <option value="JA">JA, den er aktiv</option>
+                        <option value="NEJ">NEJ, den er ikke aktiv</option>
+                    </select>
+            </label>
+            <div>Højtalerens indgang (hvis der er flere typer, skriv det i beskrivelsesfeltet):</div>
+                <select type="text" name="inputs">
+                    <option value="mini-Jack 3,5 mm">mini-Jack 3,5 mm</option>
+                    <option value="XLR">XLR</option>
+                    <option value="DMX 5 pol">DMX 5 pol</option>
+                    <option value="DMX 3 pol">DMX 3 pol</option>
+                    <option value="Jack">Jack</option>
+                    <option value="Phono">Phono</option>
+                    <option value="Anden">Anden</option>
+                </select>
+            <label>
                 <div>Beskrivelse af Højtaleren(ikke obligatorisk):</div>
                 <textarea name="description">{{description}}</textarea>
             </label>
-            <!-- <label>
-                <div>Billede af lampen(ikke obligatorisk):</div>
-                <input type="file" name="image">
-            </label> -->
+
             <div class="error">{{error}}</div>
             <input type="submit">
         </form>

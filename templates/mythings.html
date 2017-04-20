@@ -124,13 +124,19 @@
             {% for msp in my_speakers %}
                 <hr>
                 <br>
+                {% if msp.active == "JA" %}
+                    Højtaleren er AKTIV
+                {% else %}
+                    Højtaleren er IKKE AKTIV
+                {% endif %}
+                <br>
                 Mærke: {{ msp.brand }}
                 <br>
                 Model: {{ msp.model }}
                 <br>
-                Beskrivelse: {{ msp.description }}
+                Primær input: {{ msp.inputs }}
                 <br>
-                <!-- Billede: {{ msp.image }} -->
+                Beskrivelse: {{ msp.description }}
                 <br>
                 <hr>
             {% endfor %}

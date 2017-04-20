@@ -5,31 +5,25 @@
     <div class="row">
         <div class="eightypercent">
             <span class="page_heading">
-                <h1>Her er alle lamper</h1>
+                <h1>Her er alle dæmpere</h1>
             </span>
         </div>
     </div>
     <div class="row">
         <div class="eightypercent">
             <br>
-            {% for al in all_lamps %}
+            {% for ad in all_dampers %}
                 <hr>
                 <br>
-                Lampetype: {{ al.lampmodeltype }}
+                Mærke: {{ ad.brand }}
                 <br>
-                Mærke: {{ al.brand }}
+                Model: {{ ad.model }}
                 <br>
-                Pæretype: {{ al.lamptype }}
+                Beskrivelse: {{ ad.description }}
                 <br>
-                Model: {{ al.model }}
+                Ejer: {{ ad.owner }}
                 <br>
-                Effekt: {{ al.watt }} Watt
-                <br>
-                Beskrivelse: {{ al.description }}
-                <br>
-                Ejer: {{ al.owner }}
-                <br>
-                Kontaktnummer: {{ al.contact }}
+                Kontaktnummer: {{ ad.contact }}
                 <br>
                 <hr>
             {% endfor %}

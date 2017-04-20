@@ -150,6 +150,7 @@ class Lamp(db.Model):
 class Cable(db.Model):
     """class that creates the basic database structure for Cable"""
     owner = db.StringProperty(required=True)
+    contact = db.PhoneNumberProperty(required=True)
     connection = db.StringProperty(required=True)
     length = db.IntegerProperty(required=True)
     description = db.TextProperty()
@@ -158,6 +159,7 @@ class Cable(db.Model):
 class Damper(db.Model):
     """class that creates the basic database structure for Damper"""
     owner = db.StringProperty(required=True)
+    contact = db.PhoneNumberProperty(required=True)
     brand = db.StringProperty(required=True)
     model = db.StringProperty(required=True)
     description = db.TextProperty()
@@ -166,6 +168,7 @@ class Damper(db.Model):
 class LightMixer(db.Model):
     """class that creates the basic database structure for Mixer"""
     owner = db.StringProperty(required=True)
+    contact = db.PhoneNumberProperty(required=True)
     brand = db.StringProperty(required=True)
     model = db.StringProperty(required=True)
     description = db.TextProperty()
@@ -174,6 +177,7 @@ class LightMixer(db.Model):
 class SoundMixer(db.Model):
     """class that creates the basic database structure for Mixer"""
     owner = db.StringProperty(required=True)
+    contact = db.PhoneNumberProperty(required=True)
     brand = db.StringProperty(required=True)
     model = db.StringProperty(required=True)
     description = db.TextProperty()
@@ -182,14 +186,18 @@ class SoundMixer(db.Model):
 class Speaker(db.Model):
     """class that creates the basic database structure for Speaker"""
     owner = db.StringProperty(required=True)
+    contact = db.PhoneNumberProperty(required=True)
     brand = db.StringProperty(required=True)
     model = db.TextProperty(required=True)
+    active = db.TextProperty(required=True)
+    inputs = db.TextProperty(required=True)
     description = db.TextProperty()
     booked = db.BooleanProperty()
 
 class PhotoCamera(db.Model):
     """class that creates the basic database structure for Camera"""
     owner = db.StringProperty(required=True)
+    contact = db.PhoneNumberProperty(required=True)
     brand = db.StringProperty(required=True)
     model = db.TextProperty(required=True)
     description = db.TextProperty()
@@ -198,6 +206,7 @@ class PhotoCamera(db.Model):
 class VideoCamera(db.Model):
     """class that creates the basic database structure for Camera"""
     owner = db.StringProperty(required=True)
+    contact = db.PhoneNumberProperty(required=True)
     brand = db.StringProperty(required=True)
     model = db.TextProperty(required=True)
     description = db.TextProperty()
@@ -206,6 +215,7 @@ class VideoCamera(db.Model):
 class Scenography(db.Model):
     """class that creates the basic database structure for Scenography"""
     owner = db.StringProperty(required=True)
+    contact = db.PhoneNumberProperty(required=True)
     model = db.TextProperty(required=True)
     description = db.TextProperty(required=True)
     linktext = db.TextProperty()
@@ -214,6 +224,7 @@ class Scenography(db.Model):
 class Costumes(db.Model):
     """class that creates the basic database structure for Costume"""
     owner = db.StringProperty(required=True)
+    contact = db.PhoneNumberProperty(required=True)
     model = db.TextProperty(required=True)
     description = db.TextProperty(required=True)
     linktext = db.TextProperty()
@@ -288,6 +299,7 @@ class NewCable(Handler):
             return self.redirect("/mypage/login")
 
         owner = self.user.name
+        contact = self.user.phone
         connection = self.request.get("connection")
         length = int(self.request.get("length"))
         description = self.request.get("description")
@@ -296,7 +308,7 @@ class NewCable(Handler):
             description = "Ingen beskrivelse er givet."
 
         if connection and length:
-            c = Cable(parent = blog_key(), owner = owner, connection = connection,
+            c = Cable(parent = blog_key(), owner = owner, contact = contact, connection = connection,
                 length = length, description = description)
             c.put()
             time.sleep(0.1)
@@ -321,6 +333,7 @@ class NewDamper(Handler):
             return self.redirect("/mypage/login")
 
         owner = self.user.name
+        contact = self.user.phone
         brand = self.request.get("brand")
         model = self.request.get("model")
         description = self.request.get("description")
@@ -329,7 +342,7 @@ class NewDamper(Handler):
             description = "Ingen beskrivelse er givet."
 
         if brand and model:
-            d = Damper(parent = blog_key(), owner = owner, brand = brand, model = model,
+            d = Damper(parent = blog_key(), owner = owner, contact = contact, brand = brand, model = model,
                 description = description)
             d.put()
             time.sleep(0.1)
@@ -354,6 +367,7 @@ class NewLightMixer(Handler):
             return self.redirect("/mypage/login")
 
         owner = self.user.name
+        contact = self.user.phone
         brand = self.request.get("brand")
         model = self.request.get("model")
         description = self.request.get("description")
@@ -362,7 +376,7 @@ class NewLightMixer(Handler):
             description = "Ingen beskrivelse er givet."
 
         if brand and model:
-            lm = LightMixer(parent = blog_key(), owner = owner, brand = brand, model = model,
+            lm = LightMixer(parent = blog_key(), owner = owner, contact = contact, brand = brand, model = model,
                 description = description)
             lm.put()
             time.sleep(0.1)
@@ -387,6 +401,7 @@ class NewSoundMixer(Handler):
             return self.redirect("/mypage/login")
 
         owner = self.user.name
+        contact = self.user.phone
         brand = self.request.get("brand")
         model = self.request.get("model")
         description = self.request.get("description")
@@ -395,7 +410,7 @@ class NewSoundMixer(Handler):
             description = "Ingen beskrivelse er givet."
 
         if brand and model:
-            sm = SoundMixer(parent = blog_key(), owner = owner, brand = brand, model = model,
+            sm = SoundMixer(parent = blog_key(), owner = owner, contact = contact, brand = brand, model = model,
                 description = description)
             sm.put()
             time.sleep(0.1)
@@ -420,23 +435,26 @@ class NewSpeaker(Handler):
             return self.redirect("/mypage/login")
 
         owner = self.user.name
+        contact = self.user.phone
         brand = self.request.get("brand")
         model = self.request.get("model")
+        inputs = self.request.get("inputs")
+        active = self.request.get("active")
         description = self.request.get("description")
 
         if not description:
             description = "Ingen beskrivelse er givet."
 
         if brand and model:
-            sp = Speaker(parent = blog_key(), owner = owner, brand = brand, model = model,
-                description = description)
+            sp = Speaker(parent = blog_key(), owner = owner, contact = contact, brand = brand, model = model,
+                inputs = inputs, active = active, description = description)
             sp.put()
             time.sleep(0.1)
             self.redirect("/mypage/mythings")
         else:
             error = "Du skal udfylde alle obligatorisk felter!"
             return self.render("newspeaker.html", brand = brand, model = model,
-                description = description, error = error)
+                inputs = inputs, active = active, description = description, error = error)
 
 #Class below handles new instances of PHOTOCAMERA.
 class NewPhotoCamera(Handler):
@@ -453,6 +471,7 @@ class NewPhotoCamera(Handler):
             return self.redirect("/mypage/login")
 
         owner = self.user.name
+        contact = self.user.phone
         brand = self.request.get("brand")
         model = self.request.get("model")
         description = self.request.get("description")
@@ -461,7 +480,7 @@ class NewPhotoCamera(Handler):
             description = "Ingen beskrivelse er givet."
 
         if brand and model:
-            pc = PhotoCamera(parent = blog_key(), owner = owner, brand = brand, model = model,
+            pc = PhotoCamera(parent = blog_key(), owner = owner, contact = contact, brand = brand, model = model,
                 description = description)
             pc.put()
             time.sleep(0.1)
@@ -486,6 +505,7 @@ class NewVideoCamera(Handler):
             return self.redirect("/mypage/login")
 
         owner = self.user.name
+        contact = self.user.phone
         brand = self.request.get("brand")
         model = self.request.get("model")
         description = self.request.get("description")
@@ -494,7 +514,7 @@ class NewVideoCamera(Handler):
             description = "Ingen beskrivelse er givet."
 
         if brand and model:
-            vc = VideoCamera(parent = blog_key(), owner = owner, brand = brand, model = model,
+            vc = VideoCamera(parent = blog_key(), owner = owner, contact = contact, brand = brand, model = model,
                 description = description)
             vc.put()
             time.sleep(0.1)
@@ -519,6 +539,7 @@ class NewScenography(Handler):
             return self.redirect("/mypage/login")
 
         owner = self.user.name
+        contact = self.user.phone
         model = self.request.get("model")
         description = self.request.get("description")
         linktext = self.request.get("linktext")
@@ -527,7 +548,7 @@ class NewScenography(Handler):
             description = "Ingen beskrivelse er givet."
 
         if model and description:
-            scy = Scenography(parent = blog_key(), owner = owner, model = model,
+            scy = Scenography(parent = blog_key(), owner = owner, contact = contact, model = model,
                 description = description, linktext = linktext)
             scy.put()
             time.sleep(0.1)
@@ -552,6 +573,7 @@ class NewCostume(Handler):
             return self.redirect("/mypage/login")
 
         owner = self.user.name
+        contact = self.user.phone
         model = self.request.get("model")
         description = self.request.get("description")
         linktext = self.request.get("linktext")
@@ -560,7 +582,7 @@ class NewCostume(Handler):
             description = "Ingen beskrivelse er givet."
 
         if model and description:
-            cos = Costumes(parent = blog_key(), owner = owner, model = model,
+            cos = Costumes(parent = blog_key(), owner = owner, contact = contact, model = model,
                 description = description, linktext = linktext)
             cos.put()
             time.sleep(0.1)
@@ -794,7 +816,7 @@ class MyThings(Handler):
 class AllLamps(Handler):
     """class that handles all lamps, showing them all on one page"""
     def render_posts(self):
-        all_lamps = db.GqlQuery("""SELECT * FROM Lamp ORDER BY watt ASC""")
+        all_lamps = db.GqlQuery("""SELECT * FROM Lamp ORDER BY lamptype ASC""")
         self.render("alllamps.html", all_lamps = all_lamps)
 
     def get(self):
@@ -806,6 +828,46 @@ class AllCables(Handler):
     def render_posts(self):
         all_cables = db.GqlQuery("""SELECT * FROM Cable ORDER BY connection""")
         self.render("allcables.html", all_cables = all_cables)
+
+    def get(self):
+        self.render_posts()
+
+#class that handles a page with all dampers
+class AllDampers(Handler):
+    """class that handles all dampers, showing them all on one page"""
+    def render_posts(self):
+        all_dampers = db.GqlQuery("""SELECT * FROM Damper ORDER BY model ASC""")
+        self.render("alldampers.html", all_dampers = all_dampers)
+
+    def get(self):
+        self.render_posts()
+
+#class that handles a page with all lightmixers
+class AllLightMixers(Handler):
+    """class that handles all lightmixers, showing them all on one page"""
+    def render_posts(self):
+        all_lightmixers = db.GqlQuery("""SELECT * FROM LightMixer ORDER BY model ASC""")
+        self.render("alllightmixers.html", all_lightmixers = all_lightmixers)
+
+    def get(self):
+        self.render_posts()
+
+#class that handles a page with all soundmixers
+class AllSoundMixers(Handler):
+    """class that handles all soundmixers, showing them all on one page"""
+    def render_posts(self):
+        all_soundmixers = db.GqlQuery("""SELECT * FROM SoundMixer ORDER BY model ASC""")
+        self.render("allsoundmixers.html", all_soundmixers = all_soundmixers)
+
+    def get(self):
+        self.render_posts()
+
+#class that handles a page with all speakers
+class AllSpeakers(Handler):
+    """class that handles all speakers, showing them all on one page"""
+    def render_posts(self):
+        all_speakers = db.GqlQuery("""SELECT * FROM Speaker""")
+        self.render("allspeakers.html", all_speakers = all_speakers)
 
     def get(self):
         self.render_posts()
@@ -955,15 +1017,16 @@ class WelcomeHandler(Handler):
         else:
             self.redirect('/mypage/signup')
 
-
+#class that handles the main page
 class MainPage(Handler):
-    """class that renders the main blog page"""
+    """class that renders the main page"""
     def get(self):
         if self.user:
             self.render("mypage.html", username = self.user.name)
         else:
             self.redirect('/mypage/login')
 
+#class that handles a list of all members
 class Members(Handler):
     """Class that renders a list of members"""
     def render_posts(self):
@@ -1004,7 +1067,11 @@ app = webapp2.WSGIApplication([('/', Entrance),
                                ('/mypage/members', Members),
                                ('/mypage/searchtype', SearchType),
                                ('/mypage/alllamps', AllLamps),
-                               ('/mypage/allcables', AllCables)
+                               ('/mypage/allcables', AllCables),
+                               ('/mypage/alldampers', AllDampers),
+                               ('/mypage/alllightmixers', AllLightMixers),
+                               ('/mypage/allsoundmixers', AllSoundMixers),
+                               ('/mypage/allspeakers', AllSpeakers)
                              ],
                              debug=True)
 

@@ -317,6 +317,45 @@ class NewLamp(Handler):
             return self.render("newlamp.html", brand = brand, model = model,
                 watt = watt, description = description, error = error)
 
+#Class for editing a Lamp instance
+class EditLamp(Handler):
+    """class that opens a lamp for editing"""
+    def get(self, post_id):
+        key = db.Key.from_path('Lamp', int(post_id), parent = blog_key())
+        l = db.get(key)
+
+        if not l:
+            self.error(404)
+            return self.render("404.html")
+
+        if self.user.name == l.owner:
+            self.render("edit.html", p=p, subject=p.subject, content=p.content)
+        else:
+            error = "Du skal logge ind for at editere en genstand!"
+            return self.render('login.html', error=error)
+
+    def post(self, post_id):
+        key = db.Key.from_path('Posts', int(post_id), parent = blog_key())
+        p = db.get(key)
+
+        subject = self.request.get("subject")
+        content = self.request.get("content")
+
+        if self.user and self.user.name == p.author:
+            if subject and content:
+                p.subject = subject
+                p.content = content
+                p.put()
+                self.redirect("/mypage/%s" % str(p.key().id()))
+            else:
+                error = "You have to fill in both subject and content fields!"
+                self.render("edit.html", p=p, subject=subject, content=content,
+                             error=error)
+        else:
+            error = "You need to be logged in to edit your post!"
+            return self.render('login.html', error=error)
+
+
 #Class below handles new instances of CABLE.
 class NewCable(Handler):
     """class that renders a page for creating a new Cable instance"""

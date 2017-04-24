@@ -36,9 +36,21 @@
                 <br>
                 Beskrivelse: {{ ml.description }}
                 <br>
-                <!-- Billede: {{ ml.image }} -->
                 <br>
-                <hr>
+                <div class="post_footer">
+                    <br><br>
+                    {% if user.name %}
+                        {% if ml.owner == user.name %}
+                            <form action="/mypage/editlamp/{{ml.key().id()}}" class="edit_button">
+                                <input type="submit" value="REDIGER LAMPE">
+                            </form>
+                            <form action="/mypage/deleted/{{ml.key().id()}}" method="get" class="delete_button">
+                                <input type="submit" value="SLET LAMPE">
+                            </form>
+                            <br><br>
+                        {% endif %}
+                    {% endif %}
+                </div>
             {% endfor %}
             <hr>
         </div>

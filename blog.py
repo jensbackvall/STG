@@ -145,6 +145,7 @@ class Lamp(db.Model):
     model = db.StringProperty(required=True)
     watt = db.IntegerProperty(required=True)
     description = db.TextProperty()
+    borrower = db.StringProperty()
     booked = db.BooleanProperty()
 
 class Cable(db.Model):
@@ -154,6 +155,7 @@ class Cable(db.Model):
     connection = db.StringProperty(required=True)
     length = db.IntegerProperty(required=True)
     description = db.TextProperty()
+    borrower = db.StringProperty()
     booked = db.BooleanProperty()
 
 class Damper(db.Model):
@@ -163,6 +165,7 @@ class Damper(db.Model):
     brand = db.StringProperty(required=True)
     model = db.StringProperty(required=True)
     description = db.TextProperty()
+    borrower = db.StringProperty()
     booked = db.BooleanProperty()
 
 class LightMixer(db.Model):
@@ -172,6 +175,7 @@ class LightMixer(db.Model):
     brand = db.StringProperty(required=True)
     model = db.StringProperty(required=True)
     description = db.TextProperty()
+    borrower = db.StringProperty()
     booked = db.BooleanProperty()
 
 class SoundMixer(db.Model):
@@ -182,6 +186,7 @@ class SoundMixer(db.Model):
     model = db.StringProperty(required=True)
     channels = db.IntegerProperty()
     description = db.TextProperty()
+    borrower = db.StringProperty()
     booked = db.BooleanProperty()
 
 class Speaker(db.Model):
@@ -193,6 +198,7 @@ class Speaker(db.Model):
     active = db.TextProperty(required=True)
     inputs = db.TextProperty(required=True)
     description = db.TextProperty()
+    borrower = db.StringProperty()
     booked = db.BooleanProperty()
 
 class PhotoCamera(db.Model):
@@ -205,6 +211,7 @@ class PhotoCamera(db.Model):
     brand = db.StringProperty(required=True)
     model = db.TextProperty(required=True)
     description = db.TextProperty()
+    borrower = db.StringProperty()
     booked = db.BooleanProperty()
 
 class VideoCamera(db.Model):
@@ -215,6 +222,7 @@ class VideoCamera(db.Model):
     resolution = db.StringProperty(required=True)
     model = db.TextProperty(required=True)
     description = db.TextProperty()
+    borrower = db.StringProperty()
     booked = db.BooleanProperty()
 
 class Projector(db.Model):
@@ -229,6 +237,7 @@ class Projector(db.Model):
     input2 = db.StringProperty()
     input3 = db.StringProperty()
     description = db.TextProperty()
+    borrower = db.StringProperty()
     booked = db.BooleanProperty()
 
 class TV(db.Model):
@@ -243,6 +252,7 @@ class TV(db.Model):
     input2 = db.StringProperty()
     input3 = db.StringProperty()
     description = db.TextProperty()
+    borrower = db.StringProperty()
     booked = db.BooleanProperty()
 
 class Scenography(db.Model):
@@ -252,6 +262,7 @@ class Scenography(db.Model):
     model = db.TextProperty(required=True)
     description = db.TextProperty(required=True)
     linktext = db.TextProperty()
+    borrower = db.StringProperty()
     booked = db.BooleanProperty()
 
 class Costumes(db.Model):
@@ -261,6 +272,7 @@ class Costumes(db.Model):
     model = db.TextProperty(required=True)
     description = db.TextProperty(required=True)
     linktext = db.TextProperty()
+    borrower = db.StringProperty()
     booked = db.BooleanProperty()
 
 
@@ -311,7 +323,7 @@ class NewLamp(Handler):
                 lampmodeltype = lampmodeltype, model = model, watt = watt, description = description)
             l.put()
             time.sleep(0.1)
-            self.redirect("/mypage/mythings")
+            self.redirect("/mypage/mythings/%s" % str(l.key().id()))
         else:
             error = "Du skal udfylde alle obligatorisk felter!"
             return self.render("newlamp.html", brand = brand, model = model,
@@ -320,39 +332,57 @@ class NewLamp(Handler):
 #Class for editing a Lamp instance
 class EditLamp(Handler):
     """class that opens a lamp for editing"""
-    def get(self, post_id):
-        key = db.Key.from_path('Lamp', int(post_id), parent = blog_key())
-        l = db.get(key)
+    def get(self, lamp_id):
+        key = db.Key.from_path('Lamp', int(lamp_id), parent = blog_key())
+        ml = db.get(key)
 
-        if not l:
+        if not ml:
             self.error(404)
             return self.render("404.html")
 
-        if self.user.name == l.owner:
-            self.render("edit.html", p=p, subject=p.subject, content=p.content)
+        if self.user.name == ml.owner:
+            u = self.user.name
+            users = db.GqlQuery("""SELECT * FROM User where name != :u""", u = u)
+            self.render("editlamp.html", ml=ml, users = users, owner = ml.owner, contact = ml.contact, brand = ml.brand, lamptype = ml.lamptype,
+                lampmodeltype = ml.lampmodeltype, model = ml.model, watt = ml.watt, borrower = ml.borrower, description = ml.description)
         else:
-            error = "Du skal logge ind for at editere en genstand!"
+            error = "Du skal logge ind for at redigere en genstand!"
             return self.render('login.html', error=error)
 
-    def post(self, post_id):
-        key = db.Key.from_path('Posts', int(post_id), parent = blog_key())
-        p = db.get(key)
+    def post(self, lamp_id):
+        key = db.Key.from_path('Lamp', int(lamp_id), parent = blog_key())
+        ml = db.get(key)
 
-        subject = self.request.get("subject")
-        content = self.request.get("content")
+        owner = self.user.name
+        contact = self.user.phone
+        brand = self.request.get("brand")
+        lamptype = self.request.get("lamptype")
+        lampmodeltype = self.request.get("lampmodeltype")
+        model = self.request.get("model")
+        watt = int(self.request.get("watt"))
+        description = self.request.get("description")
+        borrower = self.request.get("borrower")
 
-        if self.user and self.user.name == p.author:
-            if subject and content:
-                p.subject = subject
-                p.content = content
-                p.put()
-                self.redirect("/mypage/%s" % str(p.key().id()))
+        if self.user and self.user.name == ml.owner:
+            if brand and model and watt:
+                ml.owner = owner
+                ml.contact = contact
+                ml.brand = brand
+                ml.lamptype = lamptype
+                ml.lampmodeltype = lampmodeltype
+                ml.model = model
+                ml.watt = watt
+                ml.description = description
+                ml.borrower = borrower
+                ml.put()
+                time.sleep(0.1)
+                self.redirect("/mypage/mythings")
             else:
-                error = "You have to fill in both subject and content fields!"
-                self.render("edit.html", p=p, subject=subject, content=content,
-                             error=error)
+                error = "Du skal udfylde alle obligatorisk felter!"
+                return self.render("editlamp.html", ml = ml, brand = brand, model = model,
+                        watt = watt, description = description, error = error)
         else:
-            error = "You need to be logged in to edit your post!"
+            error = "Du skal logge ind for at redigere en genstand!"
             return self.render('login.html', error=error)
 
 
@@ -833,7 +863,7 @@ class DeletePost(Handler):
 #class that handles personal page with all things ie lamps, cables etc
 class MyThings(Handler):
     """class that handles users own posts, to show them all on one page"""
-    def render_posts(self):
+    def render_things(self):
         u = self.user.name
         my_lamps = db.GqlQuery("""SELECT * FROM Lamp WHERE owner = :u ORDER BY watt ASC""", u=u)
         my_cables = db.GqlQuery("""SELECT * FROM Cable WHERE owner = :u""", u=u)
@@ -853,128 +883,128 @@ class MyThings(Handler):
             my_costumes = my_costumes, my_projectors = my_projectors, my_tvs = my_tvs)
 
     def get(self):
-        self.render_posts()
+        self.render_things()
 
 
 #class that handles a page with all lamps
 class AllLamps(Handler):
     """class that handles all lamps, showing them all on one page"""
-    def render_posts(self):
+    def render_things(self):
         all_lamps = db.GqlQuery("""SELECT * FROM Lamp ORDER BY lamptype ASC""")
         self.render("alllamps.html", all_lamps = all_lamps)
 
     def get(self):
-        self.render_posts()
+        self.render_things()
 
 #class that handles a page with all cables
 class AllCables(Handler):
     """class that handles all cables, showing them all on one page"""
-    def render_posts(self):
+    def render_things(self):
         all_cables = db.GqlQuery("""SELECT * FROM Cable ORDER BY connection""")
         self.render("allcables.html", all_cables = all_cables)
 
     def get(self):
-        self.render_posts()
+        self.render_things()
 
 #class that handles a page with all dampers
 class AllDampers(Handler):
     """class that handles all dampers, showing them all on one page"""
-    def render_posts(self):
+    def render_things(self):
         all_dampers = db.GqlQuery("""SELECT * FROM Damper ORDER BY model ASC""")
         self.render("alldampers.html", all_dampers = all_dampers)
 
     def get(self):
-        self.render_posts()
+        self.render_things()
 
 #class that handles a page with all lightmixers
 class AllLightMixers(Handler):
     """class that handles all lightmixers, showing them all on one page"""
-    def render_posts(self):
+    def render_things(self):
         all_lightmixers = db.GqlQuery("""SELECT * FROM LightMixer ORDER BY model ASC""")
         self.render("alllightmixers.html", all_lightmixers = all_lightmixers)
 
     def get(self):
-        self.render_posts()
+        self.render_things()
 
 #class that handles a page with all soundmixers
 class AllSoundMixers(Handler):
     """class that handles all soundmixers, showing them all on one page"""
-    def render_posts(self):
+    def render_things(self):
         all_soundmixers = db.GqlQuery("""SELECT * FROM SoundMixer ORDER BY model ASC""")
         self.render("allsoundmixers.html", all_soundmixers = all_soundmixers)
 
     def get(self):
-        self.render_posts()
+        self.render_things()
 
 #class that handles a page with all speakers
 class AllSpeakers(Handler):
     """class that handles all speakers, showing them all on one page"""
-    def render_posts(self):
+    def render_things(self):
         all_speakers = db.GqlQuery("""SELECT * FROM Speaker""")
         self.render("allspeakers.html", all_speakers = all_speakers)
 
     def get(self):
-        self.render_posts()
+        self.render_things()
 
 #class that handles a page with all photocameras
 class AllPhotoCameras(Handler):
     """class that handles all photocameras, showing them all on one page"""
-    def render_posts(self):
+    def render_things(self):
         all_photocameras = db.GqlQuery("""SELECT * FROM PhotoCamera ORDER BY digianal""")
         self.render("allphotocameras.html", all_photocameras = all_photocameras)
 
     def get(self):
-        self.render_posts()
+        self.render_things()
 
 #class that handles a page with all videocameras
 class AllVideoCameras(Handler):
     """class that handles all videocameras, showing them all on one page"""
-    def render_posts(self):
+    def render_things(self):
         all_videocameras = db.GqlQuery("""SELECT * FROM VideoCamera ORDER BY resolution""")
         self.render("allvideocameras.html", all_videocameras = all_videocameras)
 
     def get(self):
-        self.render_posts()
+        self.render_things()
 
 #class that handles a page with all projectors
 class AllProjectors(Handler):
     """class that handles all projectors, showing them all on one page"""
-    def render_posts(self):
+    def render_things(self):
         all_projectors = db.GqlQuery("""SELECT * FROM Projector ORDER BY resolution""")
         self.render("allprojectors.html", all_projectors = all_projectors)
 
     def get(self):
-        self.render_posts()
+        self.render_things()
 
 #class that handles a page with all tvs
 class AllTVs(Handler):
     """class that handles all tvs, showing them all on one page"""
-    def render_posts(self):
+    def render_things(self):
         all_tvs = db.GqlQuery("""SELECT * FROM TV ORDER BY resolution""")
         self.render("alltvs.html", all_tvs = all_tvs)
 
     def get(self):
-        self.render_posts()
+        self.render_things()
 
 #class that handles a page with all scenography
 class AllScenography(Handler):
     """class that handles all scenography, showing them all on one page"""
-    def render_posts(self):
+    def render_things(self):
         all_scenography = db.GqlQuery("""SELECT * FROM Scenography""")
         self.render("allscenography.html", all_scenography = all_scenography)
 
     def get(self):
-        self.render_posts()
+        self.render_things()
 
 #class that handles a page with all costumes
 class AllCostumes(Handler):
     """class that handles all costumes, showing them all on one page"""
-    def render_posts(self):
+    def render_things(self):
         all_costumes = db.GqlQuery("""SELECT * FROM Costumes""")
         self.render("allcostumes.html", all_costumes = all_costumes)
 
     def get(self):
-        self.render_posts()
+        self.render_things()
 
 
 #class that handles and renders personal page
@@ -1133,19 +1163,19 @@ class MainPage(Handler):
 #class that handles a list of all members
 class Members(Handler):
     """Class that renders a list of members"""
-    def render_posts(self):
+    def render_members(self):
         members = db.GqlQuery("""SELECT * FROM User ORDER BY firstname ASC""")
         self.render("members.html", members = members)
 
     def get(self):
-        self.render_posts()
+        self.render_members()
 
 
 
 app = webapp2.WSGIApplication([('/', Entrance),
                                ('/mypage', MainPage),
                                ('/mypage/newthing', NewThing),
-                               ('/mypage/edit/([0-9]+)', EditPost),
+                               ('/mypage/editlamp/([0-9]+)', EditLamp),
                                ('/mypage/([0-9]+)', PostHandler),
                                ('/mypage/signup', Register),
                                ('/mypage/welcome', WelcomeHandler),

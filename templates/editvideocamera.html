@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <span class="page_heading">
+        <h1>Redigering af videokamera</h1>
+        <div>Her kan du redigere dette videokamera og/eller markere at det er udlånt og til hvem det er udlånt.</div>
+        <br>
+    </span>
+    <div class="newpost">
+        <form method="post">
+            <label>
+                <div>Videokameraets mærke:</div>
+                <input type="text" name="brand" value="{{brand}}">
+            </label>
+            <label>
+                <div>Videokameraets model:</div>
+                <input type="text" name="model" value="{{model}}">
+            </label>
+            <label>
+                <div>Videokameraets opløsning:</div>
+                <select type="text" name="resolution">
+                    <option value="720p">720p</option>
+                    <option value="1080p">1080p</option>
+                    <option value="2K">2K</option>
+                    <option value="4K">4K</option>
+                    <option value="anden">anden</option>
+                </select>
+            </label>
+            <label>
+                <div>Beskrivelse af Videokameraet(ikke obligatorisk):</div>
+                <textarea name="description">{{description}}</textarea>
+            </label>
+            <br>
+            <br>
+            <label>
+                <div>Ved udlån, vælg låneren blandt de navne som vises.</div>
+                <select name="borrower">
+                    <option value="None">Ingen</option>
+                    {% for u in users %}
+                        <option value="{{u.name}}">{{u.name}}</option>
+                    {% endfor %}
+                </select>
+            </label>
+            <br>
+            <br>
+            <div class="error">{{error}}</div>
+            <input type="submit" value="OK">
+            <form action="/mypage/mythings">
+                <input type="submit" value="Afbryd redigering"/>
+            </form>
+        </form>
+    </div>
+{% endblock %}

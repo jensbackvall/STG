@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <span class="page_heading">
+        <h1>Redigering af kostume</h1>
+        <div>Her kan du redigere dette kostume og/eller markere at det er udlånt og til hvem det er udlånt.</div>
+        <br>
+    </span>
+    <div class="newpost">
+        <form method="post">
+            <label>
+                <div>Kostumets type (obligatorisk):</div>
+                <input type="text" name="model" value="{{model}}">
+            </label>
+            <label>
+                <div>Beskrivelse af Kostumet (obligatorisk):</div>
+                <textarea name="description">{{description}}</textarea>
+            </label>
+            <label>
+                <div>Evt. link til billede(r) af kostumet <br>(skrives som www.xxx.xxx/xxx UDEN HTTP:// foran):</div>
+                <input type="text" name="linktext" value="{{linktext}}">
+            </label>
+            <br>
+            <br>
+            <label>
+                <div>Ved udlån, vælg låneren blandt de navne som vises.</div>
+                <select name="borrower">
+                    <option value="None">Ingen</option>
+                    {% for u in users %}
+                        <option value="{{u.name}}">{{u.name}}</option>
+                    {% endfor %}
+                </select>
+            </label>
+            <br>
+            <br>
+            <div class="error">{{error}}</div>
+            <input type="submit" value="OK">
+            <form action="/mypage/mythings">
+                <input type="submit" value="Afbryd redigering"/>
+            </form>
+        </form>
+    </div>
+{% endblock %}

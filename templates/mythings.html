@@ -18,6 +18,9 @@
         <hr>
     </div>
     <div class="row">
+        {{ message }}
+    </div>
+    <div class="row">
         <div class="ninepercent"></div>
         <div class="eightypercent">
             <h2>Mine Lamper</h2>
@@ -35,6 +38,15 @@
                 Effekt: {{ ml.watt }} Watt
                 <br>
                 Beskrivelse: {{ ml.description }}
+                {% if ml.borrower == "None" %}
+                    <br>
+                    <br>
+                    Lampen er ikke udlånt
+                {% else %}
+                    <br>
+                    <br>
+                    Udlånt til: {{ ml.borrower }}
+                {% endif %}
                 <br>
                 <br>
                 <div class="post_footer">
@@ -42,9 +54,9 @@
                     {% if user.name %}
                         {% if ml.owner == user.name %}
                             <form action="/mypage/editlamp/{{ml.key().id()}}" class="edit_button">
-                                <input type="submit" value="REDIGER LAMPE">
+                                <input type="submit" value="REDIGER/UDLÅN LAMPE">
                             </form>
-                            <form action="/mypage/deleted/{{ml.key().id()}}" method="get" class="delete_button">
+                            <form action="/mypage/deletelamp/{{ml.key().id()}}" method="get" class="delete_button">
                                 <input type="submit" value="SLET LAMPE">
                             </form>
                             <br><br>
@@ -68,10 +80,31 @@
                 Længde: {{ mc.length }} meter
                 <br>
                 Beskrivelse: {{ mc.description }}
+                {% if mc.borrower == "None" %}
+                    <br>
+                    <br>
+                    Kablet er ikke udlånt
+                {% else %}
+                    <br>
+                    <br>
+                    Udlånt til: {{ mc.borrower }}
+                {% endif %}
                 <br>
-                <!-- Billede: {{ mc.image }} -->
                 <br>
-                <hr>
+                <div class="post_footer">
+                    <br><br>
+                    {% if user.name %}
+                        {% if mc.owner == user.name %}
+                            <form action="/mypage/editcable/{{mc.key().id()}}" class="edit_button">
+                                <input type="submit" value="REDIGER/UDLÅN KABEL">
+                            </form>
+                            <form action="/mypage/deletecable/{{mc.key().id()}}" method="get" class="delete_button">
+                                <input type="submit" value="SLET KABEL">
+                            </form>
+                            <br><br>
+                        {% endif %}
+                    {% endif %}
+                </div>
             {% endfor %}
             <hr>
         </div>
@@ -89,10 +122,31 @@
                 Model: {{ md.model }}
                 <br>
                 Beskrivelse: {{ md.description }}
+                {% if md.borrower == "None" %}
+                    <br>
+                    <br>
+                    Lampen er ikke udlånt
+                {% else %}
+                    <br>
+                    <br>
+                    Udlånt til: {{ md.borrower }}
+                {% endif %}
                 <br>
-                <!-- Billede: {{ md.image }} -->
                 <br>
-                <hr>
+                <div class="post_footer">
+                    <br><br>
+                    {% if user.name %}
+                        {% if md.owner == user.name %}
+                            <form action="/mypage/editdamper/{{md.key().id()}}" class="edit_button">
+                                <input type="submit" value="REDIGER/UDLÅN DÆMPER">
+                            </form>
+                            <form action="/mypage/deletedamper/{{md.key().id()}}" method="get" class="delete_button">
+                                <input type="submit" value="SLET DÆMPER">
+                            </form>
+                            <br><br>
+                        {% endif %}
+                    {% endif %}
+                </div>
             {% endfor %}
             <hr>
         </div>
@@ -110,10 +164,31 @@
                 Model: {{ mlm.model }}
                 <br>
                 Beskrivelse: {{ mlm.description }}
+                {% if mlm.borrower == "None" %}
+                    <br>
+                    <br>
+                    Lampen er ikke udlånt
+                {% else %}
+                    <br>
+                    <br>
+                    Udlånt til: {{ mlm.borrower }}
+                {% endif %}
                 <br>
-                <!-- Billede: {{ mlm.image }} -->
                 <br>
-                <hr>
+                <div class="post_footer">
+                    <br><br>
+                    {% if user.name %}
+                        {% if mlm.owner == user.name %}
+                            <form action="/mypage/editlightmixer/{{mlm.key().id()}}" class="edit_button">
+                                <input type="submit" value="REDIGER/UDLÅN LYSMIXER">
+                            </form>
+                            <form action="/mypage/deletelightmixer/{{mlm.key().id()}}" method="get" class="delete_button">
+                                <input type="submit" value="SLET LYSMIXER">
+                            </form>
+                            <br><br>
+                        {% endif %}
+                    {% endif %}
+                </div>
             {% endfor %}
             <hr>
         </div>
@@ -133,10 +208,31 @@
                 Kanaler: {{ msm.channels }}
                 <br>
                 Beskrivelse: {{ msm.description }}
+                {% if msm.borrower == "None" %}
+                    <br>
+                    <br>
+                    Lampen er ikke udlånt
+                {% else %}
+                    <br>
+                    <br>
+                    Udlånt til: {{ msm.borrower }}
+                {% endif %}
                 <br>
-                <!-- Billede: {{ msm.image }} -->
                 <br>
-                <hr>
+                <div class="post_footer">
+                    <br><br>
+                    {% if user.name %}
+                        {% if msm.owner == user.name %}
+                            <form action="/mypage/editsoundmixer/{{msm.key().id()}}" class="edit_button">
+                                <input type="submit" value="REDIGER/UDLÅN LYDMIXER">
+                            </form>
+                            <form action="/mypage/deletesoundmixer/{{msm.key().id()}}" method="get" class="delete_button">
+                                <input type="submit" value="SLET LYDMIXER">
+                            </form>
+                            <br><br>
+                        {% endif %}
+                    {% endif %}
+                </div>
             {% endfor %}
             <hr>
         </div>
@@ -162,8 +258,31 @@
                 Primær input: {{ msp.inputs }}
                 <br>
                 Beskrivelse: {{ msp.description }}
+                {% if msp.borrower == "None" %}
+                    <br>
+                    <br>
+                    Lampen er ikke udlånt
+                {% else %}
+                    <br>
+                    <br>
+                    Udlånt til: {{ msp.borrower }}
+                {% endif %}
                 <br>
-                <hr>
+                <br>
+                <div class="post_footer">
+                    <br><br>
+                    {% if user.name %}
+                        {% if msp.owner == user.name %}
+                            <form action="/mypage/editspeaker/{{msp.key().id()}}" class="edit_button">
+                                <input type="submit" value="REDIGER/UDLÅN HØJTALER">
+                            </form>
+                            <form action="/mypage/deletespeaker/{{msp.key().id()}}" method="get" class="delete_button">
+                                <input type="submit" value="SLET HØJTALER">
+                            </form>
+                            <br><br>
+                        {% endif %}
+                    {% endif %}
+                </div>
             {% endfor %}
             <hr>
         </div>
@@ -198,9 +317,31 @@
                 Model: {{ mpc.model }}
                 <br>
                 Beskrivelse: {{ mpc.description }}
+                {% if mpc.borrower == "None" %}
+                    <br>
+                    <br>
+                    Lampen er ikke udlånt
+                {% else %}
+                    <br>
+                    <br>
+                    Udlånt til: {{ mpc.borrower }}
+                {% endif %}
                 <br>
                 <br>
-                <hr>
+                <div class="post_footer">
+                    <br><br>
+                    {% if user.name %}
+                        {% if mpc.owner == user.name %}
+                            <form action="/mypage/editphotocamera/{{mpc.key().id()}}" class="edit_button">
+                                <input type="submit" value="REDIGER/UDLÅN FOTOKAMERA">
+                            </form>
+                            <form action="/mypage/deletephotocamera/{{mpc.key().id()}}" method="get" class="delete_button">
+                                <input type="submit" value="SLET FOTOKAMERA">
+                            </form>
+                            <br><br>
+                        {% endif %}
+                    {% endif %}
+                </div>
             {% endfor %}
             <hr>
         </div>
@@ -220,9 +361,31 @@
                 Model: {{ mvc.model }}
                 <br>
                 Beskrivelse: {{ mvc.description }}
+                {% if mvc.borrower == "None" %}
+                    <br>
+                    <br>
+                    Lampen er ikke udlånt
+                {% else %}
+                    <br>
+                    <br>
+                    Udlånt til: {{ mvc.borrower }}
+                {% endif %}
                 <br>
                 <br>
-                <hr>
+                <div class="post_footer">
+                    <br><br>
+                    {% if user.name %}
+                        {% if mvc.owner == user.name %}
+                            <form action="/mypage/editvideocamera/{{mvc.key().id()}}" class="edit_button">
+                                <input type="submit" value="REDIGER/UDLÅN VIDEOKAMERA">
+                            </form>
+                            <form action="/mypage/deletevideocamera/{{mvc.key().id()}}" method="get" class="delete_button">
+                                <input type="submit" value="SLET VIDEOKAMERA">
+                            </form>
+                            <br><br>
+                        {% endif %}
+                    {% endif %}
+                </div>
             {% endfor %}
             <hr>
         </div>
@@ -250,9 +413,31 @@
                 Input 3: {{ mp.input3 }}
                 <br>
                 Beskrivelse: {{ mp.description }}
+                {% if mp.borrower == "None" %}
+                    <br>
+                    <br>
+                    Lampen er ikke udlånt
+                {% else %}
+                    <br>
+                    <br>
+                    Udlånt til: {{ mp.borrower }}
+                {% endif %}
                 <br>
                 <br>
-                <hr>
+                <div class="post_footer">
+                    <br><br>
+                    {% if user.name %}
+                        {% if mp.owner == user.name %}
+                            <form action="/mypage/editprojector/{{mp.key().id()}}" class="edit_button">
+                                <input type="submit" value="REDIGER/UDLÅN PROJEKTOR">
+                            </form>
+                            <form action="/mypage/deleteprojector/{{mp.key().id()}}" method="get" class="delete_button">
+                                <input type="submit" value="SLET PROJEKTOR">
+                            </form>
+                            <br><br>
+                        {% endif %}
+                    {% endif %}
+                </div>
             {% endfor %}
             <hr>
         </div>
@@ -280,9 +465,31 @@
                 Input 3: {{ mtv.input3 }}
                 <br>
                 Beskrivelse: {{ mtv.description }}
+                {% if mtv.borrower == "None" %}
+                    <br>
+                    <br>
+                    Lampen er ikke udlånt
+                {% else %}
+                    <br>
+                    <br>
+                    Udlånt til: {{ mtv.borrower }}
+                {% endif %}
                 <br>
                 <br>
-                <hr>
+                <div class="post_footer">
+                    <br><br>
+                    {% if user.name %}
+                        {% if mtv.owner == user.name %}
+                            <form action="/mypage/edittv/{{mtv.key().id()}}" class="edit_button">
+                                <input type="submit" value="REDIGER/UDLÅN TV/SKÆRM">
+                            </form>
+                            <form action="/mypage/deletetv/{{mtv.key().id()}}" method="get" class="delete_button">
+                                <input type="submit" value="SLET TV/SKÆRM">
+                            </form>
+                            <br><br>
+                        {% endif %}
+                    {% endif %}
+                </div>
             {% endfor %}
             <hr>
         </div>
@@ -303,7 +510,31 @@
                     Link til billede: <a href="http://{{ msc.linktext }}">{{ msc.linktext }}</a>
                     <br>
                 {% endif %}
-                <hr>
+                {% if msc.borrower == "None" %}
+                    <br>
+                    <br>
+                    Lampen er ikke udlånt
+                {% else %}
+                    <br>
+                    <br>
+                    Udlånt til: {{ msc.borrower }}
+                {% endif %}
+                <br>
+                <br>
+                <div class="post_footer">
+                    <br><br>
+                    {% if user.name %}
+                        {% if msc.owner == user.name %}
+                            <form action="/mypage/editscenography/{{msc.key().id()}}" class="edit_button">
+                                <input type="submit" value="REDIGER/UDLÅN SCENOGRAFI">
+                            </form>
+                            <form action="/mypage/deletescenography/{{msc.key().id()}}" method="get" class="delete_button">
+                                <input type="submit" value="SLET SCENOGRAFI">
+                            </form>
+                            <br><br>
+                        {% endif %}
+                    {% endif %}
+                </div>
             {% endfor %}
             <hr>
         </div>
@@ -324,7 +555,31 @@
                     Link til billede: <a href="http://{{ mcs.linktext }}">{{ mcs.linktext }}</a>
                     <br>
                 {% endif %}
-                <hr>
+                {% if mcs.borrower == "None" %}
+                    <br>
+                    <br>
+                    Lampen er ikke udlånt
+                {% else %}
+                    <br>
+                    <br>
+                    Udlånt til: {{ mcs.borrower }}
+                {% endif %}
+                <br>
+                <br>
+                <div class="post_footer">
+                    <br><br>
+                    {% if user.name %}
+                        {% if mcs.owner == user.name %}
+                            <form action="/mypage/editcostume/{{mcs.key().id()}}" class="edit_button">
+                                <input type="submit" value="REDIGER/UDLÅN KOSTUME">
+                            </form>
+                            <form action="/mypage/deletecostume/{{mcs.key().id()}}" method="get" class="delete_button">
+                                <input type="submit" value="SLET KOSTUME">
+                            </form>
+                            <br><br>
+                        {% endif %}
+                    {% endif %}
+                </div>
             {% endfor %}
             <hr>
         </div>

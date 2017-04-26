@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <span class="page_heading">
+        <h1>Redigering af lydmixer</h1>
+        <div>Her kan du redigere denne lydmixer og/eller markere at den er udlånt og til hvem den er udlånt.</div>
+        <br>
+    </span>
+    <div class="newpost">
+        <form method="post">
+            <label>
+                <div>Højtalerens mærke:</div>
+                <input type="text" name="brand" value="{{brand}}">
+            </label>
+            <label>
+                <div>Højtalerens model:</div>
+                <input type="text" name="model" value="{{model}}">
+            </label>
+            <label>
+                <div>Er højtaleren aktiv?:</div>
+                <select type="text" name="active">
+                    <option value="JA">JA, den er aktiv</option>
+                    <option value="NEJ">NEJ, den er ikke aktiv</option>
+                </select>
+            </label>
+                <div>Højtalerens indgang (hvis der er flere typer, skriv det i beskrivelsesfeltet):</div>
+                <select type="text" name="inputs">
+                    <option value="mini-Jack 3,5 mm">mini-Jack 3,5 mm</option>
+                    <option value="XLR">XLR</option>
+                    <option value="DMX 5 pol">DMX 5 pol</option>
+                    <option value="DMX 3 pol">DMX 3 pol</option>
+                    <option value="Jack">Jack</option>
+                    <option value="Phono">Phono</option>
+                    <option value="Anden">Anden</option>
+                </select>
+            <label>
+                <div>Beskrivelse af Højtaleren(ikke obligatorisk):</div>
+                <textarea name="description">{{description}}</textarea>
+            </label>
+            <br>
+            <br>
+            <label>
+                <div>Ved udlån, vælg låneren blandt de navne som vises.</div>
+                <select name="borrower">
+                    <option value="None">Ingen</option>
+                    {% for u in users %}
+                        <option value="{{u.name}}">{{u.name}}</option>
+                    {% endfor %}
+                </select>
+            </label>
+            <br>
+            <br>
+            <div class="error">{{error}}</div>
+            <input type="submit" value="OK">
+            <form action="/mypage/mythings">
+                <input type="submit" value="Afbryd redigering"/>
+            </form>
+        </form>
+    </div>
+{% endblock %}

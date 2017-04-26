@@ -2,12 +2,24 @@
 
 {% block content %}
 
-<h2>Signup here:</h2>
+<h2>Opret ny bruger her:</h2>
 <form method="post">
     <table>
         <tbody>
             <tr>
-                <td>Brugernavn(3-20 tegn, uden mellemrum)</td>
+                OBS! Det er p.t. kun muligt at lave brugernavn, fornavn, efternavn, password og email med engelsk alfabet. Dvs. at æ, ø og å giver en fejl. Så derfor bedes I ikke bruge disse bogstaver når I opretter en profil.
+                <br>
+                <br>
+            </tr>
+            <tr>
+                <td>Oprettelseskode</td>
+                <td>
+                    <input type="text" name="signupcode" value="{{signupcode}}">
+                </td>
+                <td class="error">{{signupcode_error}}</td>
+            </tr>
+            <tr>
+                <td>Brugernavn(3-20 tegn, uden mellemrum)&nbsp</td>
                 <td>
                     <input type="text" name="username" value="{{username}}">
                 </td>
@@ -57,6 +69,7 @@
             </tr>
         </tbody>
     </table>
+    <br>
     <input type="submit" value="Opret Bruger">
 </form>
 

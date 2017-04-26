@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <span class="page_heading">
+        <h1>Redigering af projektor</h1>
+        <div>Her kan du redigere denne projektor og/eller markere at den er udlånt og til hvem den er udlånt.</div>
+        <br>
+    </span>
+    <div class="newpost">
+        <form method="post">
+            <label>
+                <div>TV/skærms mærke:</div>
+                <input type="text" name="brand" value="{{brand}}">
+            </label>
+            <label>
+                <div>TV/skærms model:</div>
+                <input type="text" name="model" value="{{model}}">
+            </label>
+            <label>
+                <div>TV/skærms opløsning:</div>
+                <select type="text" name="resolution">
+                    <option value="720p">720p</option>
+                    <option value="1080p">1080p</option>
+                    <option value="2K">2K</option>
+                    <option value="4K">4K</option>
+                    <option value="anden">anden</option>
+                </select>
+            </label>
+            <label>
+                <div>TV/skærms størrelse i tommer:</div>
+                <input type="number" name="screensize" value="{{screensize}}">
+            </label>
+            <div>Ifyld så mange inputs du vil. Hvis der er flere, eller typen ikke er på listen, skriv det så i feltet Beskrivelse.</div>
+            <label>
+                <div>Input 1:</div>
+                <select type="text" name="input1">
+                    <option value="Phono">Phono</option>
+                    <option value="VGA">VGA</option>
+                    <option value="DvI">DvI</option>
+                    <option value="HDMI">HDMI</option>
+                    <option value="Component">Component</option>
+                    <option value="SCART">SCART</option>
+                    <option value="Anden">Anden</option>
+                </select>
+            </label>
+            <label>
+                <div>Input 2:</div>
+                <select type="text" name="input2">
+                    <option value="Phono">Phono</option>
+                    <option value="VGA">VGA</option>
+                    <option value="DvI">DvI</option>
+                    <option value="HDMI">HDMI</option>
+                    <option value="Component">Component</option>
+                    <option value="SCART">SCART</option>
+                    <option value="Anden">Anden</option>
+                </select>
+            </label>
+            <label>
+                <div>Input 3:</div>
+                <select type="text" name="input3">
+                    <option value="Phono">Phono</option>
+                    <option value="VGA">VGA</option>
+                    <option value="DvI">DvI</option>
+                    <option value="HDMI">HDMI</option>
+                    <option value="Component">Component</option>
+                    <option value="SCART">SCART</option>
+                    <option value="Anden">Anden</option>
+                </select>
+            </label>
+            <label>
+                <div>Beskrivelse af TV/skærm(ikke obligatorisk):</div>
+                <textarea name="description">{{description}}</textarea>
+            </label>
+            <br>
+            <br>
+            <label>
+                <div>Ved udlån, vælg låneren blandt de navne som vises.</div>
+                <select name="borrower">
+                    <option value="None">Ingen</option>
+                    {% for u in users %}
+                        <option value="{{u.name}}">{{u.name}}</option>
+                    {% endfor %}
+                </select>
+            </label>
+            <br>
+            <br>
+            <div class="error">{{error}}</div>
+            <input type="submit" value="OK">
+            <form action="/mypage/mythings">
+                <input type="submit" value="Afbryd redigering"/>
+            </form>
+        </form>
+    </div>
+{% endblock %}

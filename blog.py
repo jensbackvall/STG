@@ -1,4 +1,6 @@
 
+# -*- coding: utf-8 -*-
+
 import os
 import jinja2
 import webapp2
@@ -26,6 +28,7 @@ def render_str(template, **params):
 
 
 # functions for hashing and validating password hashing
+# oprettelseskoden er VELKOMMEN. Hvis den fornyes skal det ske på linie 1921
 
 secret = 'aaarfh-this_is-sooooo_secreteeeeeer-than_anything-ion'
 
@@ -323,7 +326,7 @@ class NewLamp(Handler):
                 lampmodeltype = lampmodeltype, model = model, watt = watt, description = description)
             l.put()
             time.sleep(0.1)
-            self.redirect("/mypage/mythings/%s" % str(l.key().id()))
+            self.redirect("/mypage/mythings")
         else:
             error = "Du skal udfylde alle obligatorisk felter!"
             return self.render("newlamp.html", brand = brand, model = model,
@@ -379,11 +382,30 @@ class EditLamp(Handler):
                 self.redirect("/mypage/mythings")
             else:
                 error = "Du skal udfylde alle obligatorisk felter!"
+                u = self.user.name
+                users = db.GqlQuery("""SELECT * FROM User where name != :u""", u = u)
                 return self.render("editlamp.html", ml = ml, brand = brand, model = model,
-                        watt = watt, description = description, error = error)
+                        lamptype = lamptype, watt = watt, lampmodeltype = lampmodeltype,
+                        description = description, borrower = borrower, users = users,
+                        error = error)
         else:
             error = "Du skal logge ind for at redigere en genstand!"
             return self.render('login.html', error=error)
+
+#Class for deleting a Lamp instance
+class DeleteLamp(Handler):
+    """class for deleting a Lamp"""
+    def get(self, lamp_id):
+        key = db.Key.from_path('Lamp', int(lamp_id), parent = blog_key())
+        ml = db.get(key)
+
+        if self.user.name == ml.owner:
+            ml.delete()
+            message = "Din lampe er uigenkaldeligt slettet!"
+            self.render("mythings.html", ml=ml, message=message)
+        else:
+            error = "Du kan kun slette dine egne ting!"
+            return self.render("login.html", error=error)
 
 
 #Class below handles new instances of CABLE.
@@ -420,6 +442,75 @@ class NewCable(Handler):
             return self.render("newcable.html", connection = connection,
                 length = length, description = description, error = error)
 
+#Class for editing a Cable instance
+class EditCable(Handler):
+    """class that opens a Cable for editing"""
+    def get(self, cable_id):
+        key = db.Key.from_path('Cable', int(cable_id), parent = blog_key())
+        mc = db.get(key)
+
+        if not mc:
+            self.error(404)
+            return self.render("404.html")
+
+        if self.user.name == mc.owner:
+            u = self.user.name
+            users = db.GqlQuery("""SELECT * FROM User where name != :u""", u = u)
+            self.render("editcable.html", mc=mc, users = users, owner = mc.owner, contact = mc.contact,
+                connection = mc.connection, length = mc.length, borrower = mc.borrower, description = mc.description)
+        else:
+            error = "Du skal logge ind for at redigere en genstand!"
+            return self.render('login.html', error=error)
+
+    def post(self, cable_id):
+        key = db.Key.from_path('Cable', int(cable_id), parent = blog_key())
+        mc = db.get(key)
+
+        owner = self.user.name
+        contact = self.user.phone
+        connection = self.request.get("connection")
+        length = int(self.request.get("length"))
+        description = self.request.get("description")
+        borrower = self.request.get("borrower")
+
+        if self.user and self.user.name == mc.owner:
+            if connection and length:
+                mc.owner = owner
+                mc.contact = contact
+                mc.connection = connection
+                mc.length = length
+                mc.description = description
+                mc.borrower = borrower
+                mc.put()
+                time.sleep(0.1)
+                self.redirect("/mypage/mythings")
+            else:
+                error = "Du skal udfylde alle obligatorisk felter!"
+                u = self.user.name
+                users = db.GqlQuery("""SELECT * FROM User where name != :u""", u = u)
+                return self.render("editcable.html", mc = mc, connection = connection, length = length,
+                        description = description, borrower = borrower, error = error, users = users)
+        else:
+            error = "Du skal logge ind for at redigere en genstand!"
+            return self.render('login.html', error=error)
+
+#Class for deleting a Cable instance
+class DeleteCable(Handler):
+    """class for deleting a Cable"""
+    def get(self, cable_id):
+        key = db.Key.from_path('Cable', int(cable_id), parent = blog_key())
+        mc = db.get(key)
+
+        if self.user.name == mc.owner:
+            mc.delete()
+            message = "Dit kabel er uigenkaldeligt slettet!"
+            self.render("mythings.html", mc=mc, message=message)
+        else:
+            error = "Du kan kun slette dine egne ting!"
+            return self.render("login.html", error=error)
+
+
+
 #Class below handles new instances of DAMPER.
 class NewDamper(Handler):
     """class that renders a page for creating a new Damper instance"""
@@ -453,6 +544,75 @@ class NewDamper(Handler):
             error = "Du skal udfylde alle obligatorisk felter!"
             return self.render("newdamper.html", brand = brand, model = model,
                 description = description, error = error)
+
+#Class for editing a Damper instance
+class EditDamper(Handler):
+    """class that opens a Damper for editing"""
+    def get(self, damper_id):
+        key = db.Key.from_path('Damper', int(damper_id), parent = blog_key())
+        md = db.get(key)
+
+        if not md:
+            self.error(404)
+            return self.render("404.html")
+
+        if self.user.name == md.owner:
+            u = self.user.name
+            users = db.GqlQuery("""SELECT * FROM User where name != :u""", u = u)
+            self.render("editdamper.html", md=md, users = users, owner = md.owner, contact = md.contact,
+                brand = md.brand, model = md.model, borrower = md.borrower, description = md.description)
+        else:
+            error = "Du skal logge ind for at redigere en genstand!"
+            return self.render('login.html', error=error)
+
+    def post(self, damper_id):
+        key = db.Key.from_path('Damper', int(damper_id), parent = blog_key())
+        md = db.get(key)
+
+        owner = self.user.name
+        contact = self.user.phone
+        brand = self.request.get("brand")
+        model = self.request.get("model")
+        description = self.request.get("description")
+        borrower = self.request.get("borrower")
+
+        if self.user and self.user.name == md.owner:
+            if brand and model:
+                md.owner = owner
+                md.contact = contact
+                md.brand = brand
+                md.model = model
+                md.description = description
+                md.borrower = borrower
+                md.put()
+                time.sleep(0.1)
+                self.redirect("/mypage/mythings")
+            else:
+                error = "Du skal udfylde alle obligatorisk felter!"
+                u = self.user.name
+                users = db.GqlQuery("""SELECT * FROM User where name != :u""", u = u)
+                return self.render("editdamper.html", md = md, brand = brand, model = model,
+                        description = description, borrower = borrower, error = error, users = users)
+        else:
+            error = "Du skal logge ind for at redigere en genstand!"
+            return self.render('login.html', error=error)
+
+#Class for deleting a Damper instance
+class DeleteDamper(Handler):
+    """class for deleting a Damper"""
+    def get(self, damper_id):
+        key = db.Key.from_path('Damper', int(damper_id), parent = blog_key())
+        md = db.get(key)
+
+        if self.user.name == md.owner:
+            md.delete()
+            message = "Din daemper er uigenkaldeligt slettet!"
+            self.render("mythings.html", md=md, message=message)
+        else:
+            error = "Du kan kun slette dine egne ting!"
+            return self.render("login.html", error=error)
+
+
 
 #Class below handles new instances of LIGHTMIXER.
 class NewLightMixer(Handler):
@@ -488,6 +648,75 @@ class NewLightMixer(Handler):
             return self.render("newlightmixer.html", brand = brand, model = model,
                 description = description, error = error)
 
+#Class for editing a LightMixer instance
+class EditLightMixer(Handler):
+    """class that opens a LightMixer for editing"""
+    def get(self, lightmixer_id):
+        key = db.Key.from_path('LightMixer', int(lightmixer_id), parent = blog_key())
+        mlm = db.get(key)
+
+        if not mlm:
+            self.error(404)
+            return self.render("404.html")
+
+        if self.user.name == mlm.owner:
+            u = self.user.name
+            users = db.GqlQuery("""SELECT * FROM User where name != :u""", u = u)
+            self.render("editlightmixer.html", mlm=mlm, users = users, owner = mlm.owner, contact = mlm.contact,
+                brand = mlm.brand, model = mlm.model, borrower = mlm.borrower, description = mlm.description)
+        else:
+            error = "Du skal logge ind for at redigere en genstand!"
+            return self.render('login.html', error=error)
+
+    def post(self, lightmixer_id):
+        key = db.Key.from_path('LightMixer', int(lightmixer_id), parent = blog_key())
+        mlm = db.get(key)
+
+        owner = self.user.name
+        contact = self.user.phone
+        brand = self.request.get("brand")
+        model = self.request.get("model")
+        description = self.request.get("description")
+        borrower = self.request.get("borrower")
+
+        if self.user and self.user.name == mlm.owner:
+            if brand and model:
+                mlm.owner = owner
+                mlm.contact = contact
+                mlm.brand = brand
+                mlm.model = model
+                mlm.description = description
+                mlm.borrower = borrower
+                mlm.put()
+                time.sleep(0.1)
+                self.redirect("/mypage/mythings")
+            else:
+                error = "Du skal udfylde alle obligatorisk felter!"
+                u = self.user.name
+                users = db.GqlQuery("""SELECT * FROM User where name != :u""", u = u)
+                return self.render("editlightmixer.html", mlm = mlm, brand = brand, model = model,
+                        description = description, borrower = borrower, error = error, users = users)
+        else:
+            error = "Du skal logge ind for at redigere en genstand!"
+            return self.render('login.html', error=error)
+
+#Class for deleting a LightMixer instance
+class DeleteLightMixer(Handler):
+    """class for deleting a LightMixer"""
+    def get(self, lightmixer_id):
+        key = db.Key.from_path('LightMixer', int(lightmixer_id), parent = blog_key())
+        mlm = db.get(key)
+
+        if self.user.name == mlm.owner:
+            mlm.delete()
+            message = "Din lysmixer er uigenkaldeligt slettet!"
+            self.render("mythings.html", mlm=mlm, message=message)
+        else:
+            error = "Du kan kun slette dine egne ting!"
+            return self.render("login.html", error=error)
+
+
+
 #Class below handles new instances of SOUNDMIXER.
 class NewSoundMixer(Handler):
     """class that renders a page for creating a new SoundMixer instance"""
@@ -522,6 +751,76 @@ class NewSoundMixer(Handler):
             error = "Du skal udfylde alle obligatorisk felter!"
             return self.render("newsoundmixer.html", brand = brand, model = model,
                 description = description, error = error)
+
+#Class for editing a SoundMixer instance
+class EditSoundMixer(Handler):
+    """class that opens a SoundMixer for editing"""
+    def get(self, soundmixer_id):
+        key = db.Key.from_path('SoundMixer', int(soundmixer_id), parent = blog_key())
+        msm = db.get(key)
+
+        if not msm:
+            self.error(404)
+            return self.render("404.html")
+
+        if self.user.name == msm.owner:
+            u = self.user.name
+            users = db.GqlQuery("""SELECT * FROM User where name != :u""", u = u)
+            self.render("editsoundmixer.html", msm=msm, users = users, owner = msm.owner, contact = msm.contact,
+                brand = msm.brand, model = msm.model, channels = msm.channels, borrower = msm.borrower, description = msm.description)
+        else:
+            error = "Du skal logge ind for at redigere en genstand!"
+            return self.render('login.html', error=error)
+
+    def post(self, soundmixer_id):
+        key = db.Key.from_path('SoundMixer', int(soundmixer_id), parent = blog_key())
+        msm = db.get(key)
+
+        owner = self.user.name
+        contact = self.user.phone
+        brand = self.request.get("brand")
+        model = self.request.get("model")
+        channels = int(self.request.get("channels"))
+        description = self.request.get("description")
+        borrower = self.request.get("borrower")
+
+        if self.user and self.user.name == msm.owner:
+            if brand and model:
+                msm.owner = owner
+                msm.contact = contact
+                msm.brand = brand
+                msm.model = model
+                msm.description = description
+                msm.borrower = borrower
+                msm.put()
+                time.sleep(0.1)
+                self.redirect("/mypage/mythings")
+            else:
+                error = "Du skal udfylde alle obligatorisk felter!"
+                u = self.user.name
+                users = db.GqlQuery("""SELECT * FROM User where name != :u""", u = u)
+                return self.render("editsoundmixer.html", msm = msm, brand = brand, model = model,
+                        description = description, borrower = borrower, error = error, users = users)
+        else:
+            error = "Du skal logge ind for at redigere en genstand!"
+            return self.render('login.html', error=error)
+
+#Class for deleting a SoundMixer instance
+class DeleteSoundMixer(Handler):
+    """class for deleting a SoundMixer"""
+    def get(self, soundmixer_id):
+        key = db.Key.from_path('SoundMixer', int(soundmixer_id), parent = blog_key())
+        msm = db.get(key)
+
+        if self.user.name == msm.owner:
+            msm.delete()
+            message = "Din lydmixer er uigenkaldeligt slettet!"
+            self.render("mythings.html", msm=msm, message=message)
+        else:
+            error = "Du kan kun slette dine egne ting!"
+            return self.render("login.html", error=error)
+
+
 
 #Class below handles new instances of SPEAKER.
 class NewSpeaker(Handler):
@@ -559,7 +858,81 @@ class NewSpeaker(Handler):
             return self.render("newspeaker.html", brand = brand, model = model,
                 inputs = inputs, active = active, description = description, error = error)
 
-#Class below handles new instances of PHOTOCAMERA.
+#Class for editing a Speaker instance
+class EditSpeaker(Handler):
+    """class that opens a Speaker for editing"""
+    def get(self, speaker_id):
+        key = db.Key.from_path('Speaker', int(speaker_id), parent = blog_key())
+        msp = db.get(key)
+
+        if not msp:
+            self.error(404)
+            return self.render("404.html")
+
+        if self.user.name == msp.owner:
+            u = self.user.name
+            users = db.GqlQuery("""SELECT * FROM User where name != :u""", u = u)
+            self.render("editspeaker.html", msp=msp, users = users, owner = msp.owner, contact = msp.contact,
+                brand = msp.brand, inputs = msp.inputs, active = msp.active, borrower = msp.borrower,
+                model = msp.model, description = msp.description)
+        else:
+            error = "Du skal logge ind for at redigere en genstand!"
+            return self.render('login.html', error=error)
+
+    def post(self, speaker_id):
+        key = db.Key.from_path('Speaker', int(speaker_id), parent = blog_key())
+        msp = db.get(key)
+
+        owner = self.user.name
+        contact = self.user.phone
+        brand = self.request.get("brand")
+        model = self.request.get("model")
+        inputs = self.request.get("inputs")
+        active = self.request.get("active")
+        description = self.request.get("description")
+        borrower = self.request.get("borrower")
+
+        if self.user and self.user.name == msp.owner:
+            if brand and model:
+                msp.owner = owner
+                msp.contact = contact
+                msp.brand = brand
+                msp.model = model
+                msp.active = active
+                msp.inputs = inputs
+                msp.description = description
+                msp.borrower = borrower
+                msp.put()
+                time.sleep(0.1)
+                self.redirect("/mypage/mythings")
+            else:
+                error = "Du skal udfylde alle obligatorisk felter!"
+                u = self.user.name
+                users = db.GqlQuery("""SELECT * FROM User where name != :u""", u = u)
+                return self.render("editspeaker.html", msp = msp, brand = brand, model = model, active = active,
+                        inputs = inputs, description = description, borrower = borrower, error = error, users =users)
+        else:
+            error = "Du skal logge ind for at redigere en genstand!"
+            return self.render('login.html', error=error)
+
+#Class for deleting a Speaker instance
+class DeleteSpeaker(Handler):
+    """class for deleting a Speaker"""
+    def get(self, speaker_id):
+        key = db.Key.from_path('Speaker', int(speaker_id), parent = blog_key())
+        msp = db.get(key)
+
+        if self.user.name == msp.owner:
+            msp.delete()
+            message = "Din lydmixer er uigenkaldeligt slettet!"
+            self.render("mythings.html", msp=msp, message=message)
+        else:
+            error = "Du kan kun slette dine egne ting!"
+            return self.render("login.html", error=error)
+
+
+
+#Class below handles new instances of PhotoCamera.
 class NewPhotoCamera(Handler):
     """class that renders a page for creating a new PhotoCamera instance"""
     def get(self):
@@ -596,6 +969,83 @@ class NewPhotoCamera(Handler):
             return self.render("newphotocamera.html", brand = brand, model = model, slr = slr,
                 digianal = digianal, vidnonvid = vidnonvid, description = description, error = error)
 
+#Class for editing a PhotoCamera instance
+class EditPhotoCamera(Handler):
+    """class that opens a PhotoCamera for editing"""
+    def get(self, photocamera_id):
+        key = db.Key.from_path('PhotoCamera', int(photocamera_id), parent = blog_key())
+        mpc = db.get(key)
+
+        if not mpc:
+            self.error(404)
+            return self.render("404.html")
+
+        if self.user.name == mpc.owner:
+            u = self.user.name
+            users = db.GqlQuery("""SELECT * FROM User where name != :u""", u = u)
+            self.render("editphotocamera.html", mpc=mpc, users = users, owner = mpc.owner, contact = mpc.contact,
+                brand = mpc.brand, digianal = mpc.digianal, vidnonvid = mpc.vidnonvid, borrower = mpc.borrower,
+                slr = mpc.slr, model = mpc.model, description = mpc.description,)
+        else:
+            error = "Du skal logge ind for at redigere en genstand!"
+            return self.render('login.html', error=error)
+
+    def post(self, photocamera_id):
+        key = db.Key.from_path('PhotoCamera', int(photocamera_id), parent = blog_key())
+        mpc = db.get(key)
+
+        owner = self.user.name
+        contact = self.user.phone
+        brand = self.request.get("brand")
+        digianal = self.request.get("digianal")
+        vidnonvid = self.request.get("vidnonvid")
+        slr = self.request.get("slr")
+        model = self.request.get("model")
+        description = self.request.get("description")
+        borrower = self.request.get("borrower")
+
+        if self.user and self.user.name == mpc.owner:
+            if brand and model:
+                mpc.owner = owner
+                mpc.contact = contact
+                mpc.brand = brand
+                mpc.model = model
+                mpc.digianal = digianal
+                mpc.slr = slr
+                mpc.vidnonvid = vidnonvid
+                mpc.description = description
+                mpc.borrower = borrower
+                mpc.put()
+                time.sleep(0.1)
+                self.redirect("/mypage/mythings")
+            else:
+                error = "Du skal udfylde alle obligatorisk felter!"
+                u = self.user.name
+                users = db.GqlQuery("""SELECT * FROM User where name != :u""", u = u)
+                return self.render("editphotocamera.html", mpc = mpc, brand = brand, model = model, digianal = digianal,
+                        slr = slr, vidnonvid = vidnonvid, description = description, borrower = borrower, error = error,
+                        users = users)
+        else:
+            error = "Du skal logge ind for at redigere en genstand!"
+            return self.render('login.html', error=error)
+
+#Class for deleting a PhotoCamera instance
+class DeletePhotoCamera(Handler):
+    """class for deleting a PhotoCamera"""
+    def get(self, photocamera_id):
+        key = db.Key.from_path('PhotoCamera', int(photocamera_id), parent = blog_key())
+        mpc = db.get(key)
+
+        if self.user.name == mpc.owner:
+            mpc.delete()
+            message = "Dit fotokamera er uigenkaldeligt slettet!"
+            self.render("mythings.html", mpc=mpc, message=message)
+        else:
+            error = "Du kan kun slette dine egne ting!"
+            return self.render("login.html", error=error)
+
+
+
 #Class below handles new instances of VIDEOCAMERA.
 class NewVideoCamera(Handler):
     """class that renders a page for creating a new VideoCamera instance"""
@@ -630,6 +1080,78 @@ class NewVideoCamera(Handler):
             error = "Du skal udfylde alle obligatorisk felter!"
             return self.render("newvideocamera.html", brand = brand, model = model,
                 description = description, resolution = resolution, error = error)
+
+#Class for editing a VideoCamera instance
+class EditVideoCamera(Handler):
+    """class that opens a VideoCamera for editing"""
+    def get(self, videocamera_id):
+        key = db.Key.from_path('VideoCamera', int(videocamera_id), parent = blog_key())
+        mvc = db.get(key)
+
+        if not mvc:
+            self.error(404)
+            return self.render("404.html")
+
+        if self.user.name == mvc.owner:
+            u = self.user.name
+            users = db.GqlQuery("""SELECT * FROM User where name != :u""", u = u)
+            self.render("editvideocamera.html", mvc=mvc, users = users, owner = mvc.owner, contact = mvc.contact,
+                brand = mvc.brand, resolution = mvc.resolution, borrower = mvc.borrower, model = mvc.model,
+                description = mvc.description,)
+        else:
+            error = "Du skal logge ind for at redigere en genstand!"
+            return self.render('login.html', error=error)
+
+    def post(self, videocamera_id):
+        key = db.Key.from_path('VideoCamera', int(videocamera_id), parent = blog_key())
+        mvc = db.get(key)
+
+        owner = self.user.name
+        contact = self.user.phone
+        brand = self.request.get("brand")
+        resolution = self.request.get("resolution")
+        model = self.request.get("model")
+        description = self.request.get("description")
+        borrower = self.request.get("borrower")
+
+        if self.user and self.user.name == mvc.owner:
+            if brand and model:
+                mvc.owner = owner
+                mvc.contact = contact
+                mvc.brand = brand
+                mvc.resolution = resolution
+                mvc.model = model
+                mvc.description = description
+                mvc.borrower = borrower
+                mvc.put()
+                time.sleep(0.1)
+                self.redirect("/mypage/mythings")
+            else:
+                error = "Du skal udfylde alle obligatorisk felter!"
+                u = self.user.name
+                users = db.GqlQuery("""SELECT * FROM User where name != :u""", u = u)
+                return self.render("editvideocamera.html", mvc = mvc, brand = brand, model = model, resolution = resolution,
+                        description = description, borrower = borrower, error = error, users = users)
+        else:
+            error = "Du skal logge ind for at redigere en genstand!"
+            return self.render('login.html', error=error)
+
+#Class for deleting a VideoCamera instance
+class DeleteVideoCamera(Handler):
+    """class for deleting a VideoCamera"""
+    def get(self, videocamera_id):
+        key = db.Key.from_path('VideoCamera', int(videocamera_id), parent = blog_key())
+        mvc = db.get(key)
+
+        if self.user.name == mvc.owner:
+            mvc.delete()
+            message = "Dit videokamera er uigenkaldeligt slettet!"
+            self.render("mythings.html", mvc=mvc, message=message)
+        else:
+            error = "Du kan kun slette dine egne ting!"
+            return self.render("login.html", error=error)
+
+
 
 #Class below handles new instances of Projector.
 class NewProjector(Handler):
@@ -671,6 +1193,88 @@ class NewProjector(Handler):
             return self.render("newprojector.html", brand = brand, model = model,
                 description = description, resolution = resolution, error = error)
 
+#Class for editing a Projector instance
+class EditProjector(Handler):
+    """class that opens a Projector for editing"""
+    def get(self, projector_id):
+        key = db.Key.from_path('Projector', int(projector_id), parent = blog_key())
+        mp = db.get(key)
+
+        if not mp:
+            self.error(404)
+            return self.render("404.html")
+
+        if self.user.name == mp.owner:
+            u = self.user.name
+            users = db.GqlQuery("""SELECT * FROM User where name != :u""", u = u)
+            self.render("editprojector.html", mp=mp, users = users, owner = mp.owner, contact = mp.contact,
+                brand = mp.brand, resolution = mp.digianal, lumen = mp.lumen, borrower = mp.borrower,
+                model = mp.model, input1 = mp.input1, input2 = mp.input2, input3 = mp.input3,
+                description = mp.description,)
+        else:
+            error = "Du skal logge ind for at redigere en genstand!"
+            return self.render('login.html', error=error)
+
+    def post(self, projector_id):
+        key = db.Key.from_path('Projector', int(projector_id), parent = blog_key())
+        mp = db.get(key)
+
+        owner = self.user.name
+        contact = self.user.phone
+        brand = self.request.get("brand")
+        resolution = self.request.get("resolution")
+        lumen = int(self.request.get("lumen"))
+        model = self.request.get("model")
+        input1 = self.request.get("input1")
+        input2 = self.request.get("input2")
+        input3 = self.request.get("input3")
+        description = self.request.get("description")
+        borrower = self.request.get("borrower")
+
+        if self.user and self.user.name == mp.owner:
+            if brand and model and owner and contact and resolution and lumen:
+                mp.owner = owner
+                mp.contact = contact
+                mp.brand = brand
+                mp.resolution = resolution
+                mp.lumen = lumen
+                mp.model = model
+                mp.input1 = input1
+                mp.input2 = input2
+                mp.input3 = input3
+                mp.description = description
+                mp.borrower = borrower
+                mp.put()
+                time.sleep(0.1)
+                self.redirect("/mypage/mythings")
+            else:
+                error = "Du skal udfylde alle obligatorisk felter!"
+                u = self.user.name
+                users = db.GqlQuery("""SELECT * FROM User where name != :u""", u = u)
+                return self.render("editprojector.html", mp = mp, brand = brand, model = model, resolution = resolution,
+                        lumen = lumen, description = description, borrower = borrower, error = error,
+                        users = users)
+        else:
+            error = "Du skal logge ind for at redigere en genstand!"
+            return self.render('login.html', error=error)
+
+#Class for deleting a Projector instance
+class DeleteProjector(Handler):
+    """class for deleting a Projector"""
+    def get(self, projector_id):
+        key = db.Key.from_path('Projector', int(projector_id), parent = blog_key())
+        mp = db.get(key)
+
+        if self.user.name == mp.owner:
+            mp.delete()
+            message = "Din projektor er uigenkaldeligt slettet!"
+            self.render("mythings.html", mp=mp, message=message)
+        else:
+            error = "Du kan kun slette dine egne ting!"
+            return self.render("login.html", error=error)
+
+
+
 #Class below handles new instances of TV.
 class NewTV(Handler):
     """class that renders a page for creating a new TV instance"""
@@ -711,6 +1315,88 @@ class NewTV(Handler):
             return self.render("newtv.html", brand = brand, model = model,
                 description = description, resolution = resolution, screensize = screensize, error = error)
 
+#Class for editing a TV instance
+class EditTV(Handler):
+    """class that opens a TV for editing"""
+    def get(self, tv_id):
+        key = db.Key.from_path('TV', int(tv_id), parent = blog_key())
+        mtv = db.get(key)
+
+        if not mtv:
+            self.error(404)
+            return self.render("404.html")
+
+        if self.user.name == mtv.owner:
+            u = self.user.name
+            users = db.GqlQuery("""SELECT * FROM User where name != :u""", u = u)
+            self.render("edittv.html", mtv=mtv, users = users, owner = mtv.owner, contact = mtv.contact,
+                brand = mtv.brand, resolution = mtv.resolution, screensize = mtv.screensize, borrower = mtv.borrower,
+                model = mtv.model, input1 = mtv.input1, input2 = mtv.input2, input3 = mtv.input3,
+                description = mtv.description,)
+        else:
+            error = "Du skal logge ind for at redigere en genstand!"
+            return self.render('login.html', error=error)
+
+    def post(self, tv_id):
+        key = db.Key.from_path('TV', int(tv_id), parent = blog_key())
+        mtv = db.get(key)
+
+        owner = self.user.name
+        contact = self.user.phone
+        brand = self.request.get("brand")
+        resolution = self.request.get("resolution")
+        screensize = int(self.request.get("screensize"))
+        model = self.request.get("model")
+        input1 = self.request.get("input1")
+        input2 = self.request.get("input2")
+        input3 = self.request.get("input3")
+        description = self.request.get("description")
+        borrower = self.request.get("borrower")
+
+        if self.user and self.user.name == mtv.owner:
+            if brand and model and owner and contact and resolution and screensize:
+                mtv.owner = owner
+                mtv.contact = contact
+                mtv.brand = brand
+                mtv.resolution = resolution
+                mtv.screensize = screensize
+                mtv.model = model
+                mtv.input1 = input1
+                mtv.input2 = input2
+                mtv.input3 = input3
+                mtv.description = description
+                mtv.borrower = borrower
+                mtv.put()
+                time.sleep(0.1)
+                self.redirect("/mypage/mythings")
+            else:
+                error = "Du skal udfylde alle obligatorisk felter!"
+                u = self.user.name
+                users = db.GqlQuery("""SELECT * FROM User where name != :u""", u = u)
+                return self.render("edittv.html", mtv = mtv, brand = brand, model = model, resolution = resolution,
+                        screensize = screensize, description = description, borrower = borrower, error = error,
+                        users = users)
+        else:
+            error = "Du skal logge ind for at redigere en genstand!"
+            return self.render('login.html', error=error)
+
+#Class for deleting a TV instance
+class DeleteTV(Handler):
+    """class for deleting a TV"""
+    def get(self, tv_id):
+        key = db.Key.from_path('TV', int(tv_id), parent = blog_key())
+        mtv = db.get(key)
+
+        if self.user.name == mtv.owner:
+            mtv.delete()
+            message = "Dit TV er uigenkaldeligt slettet!"
+            self.render("mythings.html", mtv=mtv, message=message)
+        else:
+            error = "Du kan kun slette dine egne ting!"
+            return self.render("login.html", error=error)
+
+
+
 #Class below handles new instances of SCENOGRAPHY.
 class NewScenography(Handler):
     """class that renders a page for creating a new Scenography instance"""
@@ -745,6 +1431,75 @@ class NewScenography(Handler):
             return self.render("newscenography.html", model = model,
                 description = description, error = error)
 
+#Class for editing a Scenography instance
+class EditScenography(Handler):
+    """class that opens a Scenography for editing"""
+    def get(self, scenography_id):
+        key = db.Key.from_path('Scenography', int(scenography_id), parent = blog_key())
+        msc = db.get(key)
+
+        if not msc:
+            self.error(404)
+            return self.render("404.html")
+
+        if self.user.name == msc.owner:
+            u = self.user.name
+            users = db.GqlQuery("""SELECT * FROM User where name != :u""", u = u)
+            self.render("editscenography.html", msc=msc, users = users, owner = msc.owner, contact = msc.contact,
+                borrower = msc.borrower, model = msc.model, description = msc.description, linktext = msc.linktext)
+        else:
+            error = "Du skal logge ind for at redigere en genstand!"
+            return self.render('login.html', error=error)
+
+    def post(self, scenography_id):
+        key = db.Key.from_path('Scenography', int(scenography_id), parent = blog_key())
+        msc = db.get(key)
+
+        owner = self.user.name
+        contact = self.user.phone
+        model = self.request.get("model")
+        description = self.request.get("description")
+        linktext = self.request.get("linktext")
+        borrower = self.request.get("borrower")
+
+        if self.user and self.user.name == msc.owner:
+            if model and description:
+                msc.owner = owner
+                msc.contact = contact
+                msc.model = model
+                msc.description = description
+                msc.linktext = linktext
+                msc.borrower = borrower
+                msc.put()
+                time.sleep(0.1)
+                self.redirect("/mypage/mythings")
+            else:
+                error = "Du skal udfylde alle obligatorisk felter!"
+                u = self.user.name
+                users = db.GqlQuery("""SELECT * FROM User where name != :u""", u = u)
+                return self.render("editscenography.html", msc = msc, model = model, description = description,
+                                    linktext = linktext, borrower = borrower, error = error, users = users)
+        else:
+            error = "Du skal logge ind for at redigere en genstand!"
+            return self.render('login.html', error=error)
+
+#Class for deleting a Scenography instance
+class DeleteScenography(Handler):
+    """class for deleting a Scenography"""
+    def get(self, scenography_id):
+        key = db.Key.from_path('Scenography', int(scenography_id), parent = blog_key())
+        msc = db.get(key)
+
+        if self.user.name == msc.owner:
+            msc.delete()
+            message = "Din scenografi er uigenkaldeligt slettet!"
+            self.render("mythings.html", msc=msc, message=message)
+        else:
+            error = "Du kan kun slette dine egne ting!"
+            return self.render("login.html", error=error)
+
+
+
 #Class below handles new instances of COSTUMES.
 class NewCostume(Handler):
     """class that renders a page for creating a new Costumes instance"""
@@ -778,6 +1533,75 @@ class NewCostume(Handler):
             error = "Du skal udfylde alle obligatorisk felter!"
             return self.render("newcostume.html", model = model,
                 description = description, error = error)
+
+#Class for editing a Costume instance
+class EditCostume(Handler):
+    """class that opens a Costume for editing"""
+    def get(self, costume_id):
+        key = db.Key.from_path('Costumes', int(costume_id), parent = blog_key())
+        mcs = db.get(key)
+
+        if not mcs:
+            self.error(404)
+            return self.render("404.html")
+
+        if self.user.name == mcs.owner:
+            u = self.user.name
+            users = db.GqlQuery("""SELECT * FROM User where name != :u""", u = u)
+            self.render("editcostume.html", mcs=mcs, users = users, owner = mcs.owner, contact = mcs.contact,
+                borrower = mcs.borrower, model = mcs.model, description = mcs.description, linktext = mcs.linktext)
+        else:
+            error = "Du skal logge ind for at redigere en genstand!"
+            return self.render('login.html', error=error)
+
+    def post(self, costume_id):
+        key = db.Key.from_path('Costumes', int(costume_id), parent = blog_key())
+        mcs = db.get(key)
+
+        owner = self.user.name
+        contact = self.user.phone
+        model = self.request.get("model")
+        description = self.request.get("description")
+        linktext = self.request.get("linktext")
+        borrower = self.request.get("borrower")
+
+        if self.user and self.user.name == mcs.owner:
+            if model and description:
+                mcs.owner = owner
+                mcs.contact = contact
+                mcs.model = model
+                mcs.description = description
+                mcs.linktext = linktext
+                mcs.borrower = borrower
+                mcs.put()
+                time.sleep(0.1)
+                self.redirect("/mypage/mythings")
+            else:
+                error = "Du skal udfylde alle obligatorisk felter!"
+                u = self.user.name
+                users = db.GqlQuery("""SELECT * FROM User where name != :u""", u = u)
+                return self.render("editcostume.html", mcs = mcs, model = model, description = description,
+                                    linktext = linktext, borrower = borrower, error = error, users = users)
+        else:
+            error = "Du skal logge ind for at redigere en genstand!"
+            return self.render('login.html', error=error)
+
+#Class for deleting a Costume instance
+class DeleteCostume(Handler):
+    """class for deleting a Costume"""
+    def get(self, costume_id):
+        key = db.Key.from_path('Costumes', int(costume_id), parent = blog_key())
+        mcs = db.get(key)
+
+        if self.user.name == mcs.owner:
+            mcs.delete()
+            message = "Dit kostume er uigenkaldeligt slettet!"
+            self.render("mythings.html", mcs=mcs, message=message)
+        else:
+            error = "Du kan kun slette dine egne ting!"
+            return self.render("login.html", error=error)
+
+
 
 
 #Class below links to creating new instances of lamp, speaker etc.
@@ -862,7 +1686,7 @@ class DeletePost(Handler):
 
 #class that handles personal page with all things ie lamps, cables etc
 class MyThings(Handler):
-    """class that handles users own posts, to show them all on one page"""
+    """class that handles users things, showing them all on one page"""
     def render_things(self):
         u = self.user.name
         my_lamps = db.GqlQuery("""SELECT * FROM Lamp WHERE owner = :u ORDER BY watt ASC""", u=u)
@@ -881,6 +1705,34 @@ class MyThings(Handler):
             my_lightmixers = my_lightmixers, my_soundmixers = my_soundmixers, my_speakers = my_speakers,
             my_photocameras = my_photocameras, my_videocameras = my_videocameras, my_scenography = my_scenography,
             my_costumes = my_costumes, my_projectors = my_projectors, my_tvs = my_tvs)
+
+    def get(self):
+        self.render_things()
+
+
+#class that handles personal page with all things ie lamps, cables etc a user has borrowed
+class Borrowed(Handler):
+    """class that handles all things a user has borrowed, showing them all on one page"""
+    def render_things(self):
+        u = self.user.name
+        borrowed_lamps = db.GqlQuery("""SELECT * FROM Lamp WHERE borrower = :u ORDER BY watt ASC""", u=u)
+        borrowed_cables = db.GqlQuery("""SELECT * FROM Cable WHERE borrower = :u""", u=u)
+        borrowed_dampers = db.GqlQuery("""SELECT * FROM Damper WHERE borrower = :u""", u=u)
+        borrowed_lightmixers = db.GqlQuery("""SELECT * FROM LightMixer WHERE borrower = :u""", u=u)
+        borrowed_soundmixers = db.GqlQuery("""SELECT * FROM SoundMixer WHERE borrower = :u""", u=u)
+        borrowed_speakers = db.GqlQuery("""SELECT * FROM Speaker WHERE borrower = :u""", u=u)
+        borrowed_photocameras = db.GqlQuery("""SELECT * FROM PhotoCamera WHERE borrower = :u""", u=u)
+        borrowed_videocameras = db.GqlQuery("""SELECT * FROM VideoCamera WHERE borrower = :u""", u=u)
+        borrowed_projectors = db.GqlQuery("""SELECT * FROM Projector WHERE borrower = :u""", u=u)
+        borrowed_tvs = db.GqlQuery("""SELECT * FROM TV WHERE borrower = :u""", u=u)
+        borrowed_scenography = db.GqlQuery("""SELECT * FROM Scenography WHERE borrower = :u""", u=u)
+        borrowed_costumes = db.GqlQuery("""SELECT * FROM Costumes WHERE borrower = :u""", u=u)
+        self.render("borrowed.html", borrowed_lamps = borrowed_lamps, borrowed_cables = borrowed_cables,
+            borrowed_dampers = borrowed_dampers, borrowed_lightmixers = borrowed_lightmixers,
+            borrowed_soundmixers = borrowed_soundmixers, borrowed_speakers = borrowed_speakers,
+            borrowed_photocameras = borrowed_photocameras, borrowed_videocameras = borrowed_videocameras,
+            borrowed_scenography = borrowed_scenography, borrowed_costumes = borrowed_costumes,
+            borrowed_projectors = borrowed_projectors, borrowed_tvs = borrowed_tvs)
 
     def get(self):
         self.render_things()
@@ -1056,6 +1908,7 @@ class SignUpHandler(Handler):
 
     def post(self):
         error_msg = False
+        suc = self.request.get('signupcode')
         self.username = self.request.get('username')
         self.firstname = self.request.get('firstname')
         self.surname = self.request.get('surname')
@@ -1064,11 +1917,15 @@ class SignUpHandler(Handler):
         self.email = self.request.get('email')
         self.phone = self.request.get('phone')
 
-        params = dict(username = self.username, firstname = self.firstname, surname = self.surname,
+        params = dict(suc = suc, username = self.username, firstname = self.firstname, surname = self.surname,
                 email = self.email, phone = self.phone)
 
+        if suc != "VELKOMMEN":
+            params['signupcode_error'] = "Oprettelseskoden er ugyldig."
+            error_msg = True
+
         if not valid_username(self.username):
-            params['username_error'] = "Username is invalid."
+            params['username_error'] = "Brugernavnet er ugyldigt."
             error_msg = True
 
         if not valid_firstname(self.firstname):
@@ -1175,27 +2032,49 @@ class Members(Handler):
 app = webapp2.WSGIApplication([('/', Entrance),
                                ('/mypage', MainPage),
                                ('/mypage/newthing', NewThing),
-                               ('/mypage/editlamp/([0-9]+)', EditLamp),
                                ('/mypage/([0-9]+)', PostHandler),
                                ('/mypage/signup', Register),
                                ('/mypage/welcome', WelcomeHandler),
                                ('/mypage/login', Login),
                                ('/mypage/logout', Logout),
-                               ('/mypage/deleted/([0-9]+)', DeletePost),
                                ('/mypage/mythings', MyThings),
                                ('/mypage/myprofile', MyProfile),
                                ('/mypage/newlamp', NewLamp),
+                               ('/mypage/editlamp/([0-9]+)', EditLamp),
+                               ('/mypage/deletelamp/([0-9]+)', DeleteLamp),
                                ('/mypage/newcable', NewCable),
+                               ('/mypage/editcable/([0-9]+)', EditCable),
+                               ('/mypage/deletecable/([0-9]+)', DeleteCable),
                                ('/mypage/newdamper', NewDamper),
+                               ('/mypage/editdamper/([0-9]+)', EditDamper),
+                               ('/mypage/deletedamper/([0-9]+)', DeleteDamper),
                                ('/mypage/newlightmixer', NewLightMixer),
+                               ('/mypage/editlightmixer/([0-9]+)', EditLightMixer),
+                               ('/mypage/deletelightmixer/([0-9]+)', DeleteLightMixer),
                                ('/mypage/newsoundmixer', NewSoundMixer),
+                               ('/mypage/editsoundmixer/([0-9]+)', EditSoundMixer),
+                               ('/mypage/deletesoundmixer/([0-9]+)', DeleteSoundMixer),
                                ('/mypage/newspeaker', NewSpeaker),
+                               ('/mypage/editspeaker/([0-9]+)', EditSpeaker),
+                               ('/mypage/deletespeaker/([0-9]+)', DeleteSpeaker),
                                ('/mypage/newphotocamera', NewPhotoCamera),
+                               ('/mypage/editphotocamera/([0-9]+)', EditPhotoCamera),
+                               ('/mypage/deletephotocamera/([0-9]+)', DeletePhotoCamera),
                                ('/mypage/newvideocamera', NewVideoCamera),
+                               ('/mypage/editvideocamera/([0-9]+)', EditVideoCamera),
+                               ('/mypage/deletevideocamera/([0-9]+)', DeleteVideoCamera),
                                ('/mypage/newprojector', NewProjector),
+                               ('/mypage/editprojector/([0-9]+)', EditProjector),
+                               ('/mypage/deleteprojector/([0-9]+)', DeleteProjector),
                                ('/mypage/newtv', NewTV),
+                               ('/mypage/edittv/([0-9]+)', EditTV),
+                               ('/mypage/deletetv/([0-9]+)', DeleteTV),
                                ('/mypage/newscenography', NewScenography),
+                               ('/mypage/editscenography/([0-9]+)', EditScenography),
+                               ('/mypage/deletescenography/([0-9]+)', DeleteScenography),
                                ('/mypage/newcostume', NewCostume),
+                               ('/mypage/editcostume/([0-9]+)', EditCostume),
+                               ('/mypage/deletecostume/([0-9]+)', DeleteCostume),
                                ('/mypage/members', Members),
                                ('/mypage/searchtype', SearchType),
                                ('/mypage/alllamps', AllLamps),
@@ -1209,7 +2088,8 @@ app = webapp2.WSGIApplication([('/', Entrance),
                                ('/mypage/allprojectors', AllProjectors),
                                ('/mypage/alltvs', AllTVs),
                                ('/mypage/allscenography', AllScenography),
-                               ('/mypage/allcostumes', AllCostumes)
+                               ('/mypage/allcostumes', AllCostumes),
+                               ('/mypage/borrowed', Borrowed)
                              ],
                              debug=True)
 

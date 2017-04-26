@@ -1,0 +1,355 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <br>
+    <div class="row">
+        <div class="eightypercent">
+            <span class="page_heading">
+                <h1>Her er de ting du pt har lånt!</h1>
+            </span>
+        </div>
+        <div class="nineteenpercent">
+        </div>
+        <hr>
+    </div>
+    <div class="row">
+        {{ message }}
+    </div>
+    <div class="row">
+        <div class="ninepercent"></div>
+        <div class="eightypercent">
+            <h2>Lånte Lamper</h2>
+            {% for bl in borrowed_lamps %}
+                <hr>
+                <br>
+                Mærke: {{ bl.brand }}
+                <br>
+                Pæretype: {{ bl.lamptype }}
+                <br>
+                Lampetype: {{ bl.lampmodeltype }}
+                <br>
+                Model: {{ bl.model }}
+                <br>
+                Effekt: {{ bl.watt }} Watt
+                <br>
+                Beskrivelse: {{ bl.description }}
+                <br>
+                <br>
+                Ejer: {{ bl.owner }}
+                <br>
+                Kontaktnummer: {{ bl.contact }}
+                <br>
+            {% endfor %}
+            <hr>
+        </div>
+        <div class="ninepercent"></div>
+    </div>
+    <div class="row">
+        <div class="ninepercent"></div>
+        <div class="eightypercent">
+            <h2>Lånte Kabler</h2>
+            {% for bc in borrowed_cables %}
+                <hr>
+                <br>
+                Stiktype: {{ bc.connection }}
+                <br>
+                Længde: {{ bc.length }} meter
+                <br>
+                Beskrivelse: {{ bc.description }}
+                <br>
+                <br>
+                Ejer: {{ bc.owner }}
+                <br>
+                Kontaktnummer: {{ bc.contact }}
+                <br>
+            {% endfor %}
+            <hr>
+        </div>
+        <div class="ninepercent"></div>
+    </div>
+    <div class="row">
+        <div class="ninepercent"></div>
+        <div class="eightypercent">
+            <h2>Lånte Dæmpere</h2>
+            {% for bd in borrowed_dampers %}
+                <hr>
+                <br>
+                Mærke: {{ bd.brand }}
+                <br>
+                Model: {{ bd.model }}
+                <br>
+                Beskrivelse: {{ bd.description }}
+                <br>
+                <br>
+                Ejer: {{ bd.owner }}
+                <br>
+                Kontaktnummer: {{ bd.contact }}
+                <br>
+            {% endfor %}
+            <hr>
+        </div>
+        <div class="ninepercent"></div>
+    </div>
+    <div class="row">
+        <div class="ninepercent"></div>
+        <div class="eightypercent">
+            <h2>Lånte Lysmixere</h2>
+            {% for blm in borrowed_lightmixers %}
+                <hr>
+                <br>
+                Mærke: {{ blm.brand }}
+                <br>
+                Model: {{ blm.model }}
+                <br>
+                Beskrivelse: {{ blm.description }}
+                <br>
+                <br>
+                Ejer: {{ blm.owner }}
+                <br>
+                Kontaktnummer: {{ blm.contact }}
+                <br>
+            {% endfor %}
+            <hr>
+        </div>
+        <div class="ninepercent"></div>
+    </div>
+    <div class="row">
+        <div class="ninepercent"></div>
+        <div class="eightypercent">
+            <h2>Lånte Lydmixere</h2>
+            {% for bsm in borrowed_soundmixers %}
+                <hr>
+                <br>
+                Mærke: {{ bsm.brand }}
+                <br>
+                Model: {{ bsm.model }}
+                <br>
+                Kanaler: {{ bsm.channels }}
+                <br>
+                Beskrivelse: {{ bsm.description }}
+                <br>
+                <br>
+                Ejer: {{ bsm.owner }}
+                <br>
+                Kontaktnummer: {{ bsm.contact }}
+                <br>
+            {% endfor %}
+            <hr>
+        </div>
+        <div class="ninepercent"></div>
+    </div>
+    <div class="row">
+        <div class="ninepercent"></div>
+        <div class="eightypercent">
+            <h2>Lånte Højtalere</h2>
+            {% for bsp in borrowed_speakers %}
+                <hr>
+                <br>
+                {% if bsp.active == "JA" %}
+                    Højtaleren er AKTIV
+                {% else %}
+                    Højtaleren er IKKE AKTIV
+                {% endif %}
+                <br>
+                Mærke: {{ bsp.brand }}
+                <br>
+                Model: {{ bsp.model }}
+                <br>
+                Primær input: {{ bsp.inputs }}
+                <br>
+                Beskrivelse: {{ bsp.description }}
+                <br>
+                <br>
+                Ejer: {{ bsp.owner }}
+                <br>
+                Kontaktnummer: {{ bsp.contact }}
+                <br>
+            {% endfor %}
+            <hr>
+        </div>
+        <div class="ninepercent"></div>
+    </div>
+    <div class="row">
+        <div class="ninepercent"></div>
+        <div class="eightypercent">
+            <h2>Lånte fotokameraer</h2>
+            {% for bpc in borrowed_photocameras %}
+                <hr>
+                <br>
+                {% if bpc.digianal == "digitalt" %}
+                    DIGITALT
+                {% else %}
+                    ANALOGT
+                {% endif %}
+                {% if bpc.slr == "JA" %}
+                    SPEJLREFLEKS fotokamera
+                {% else %}
+                    IKKE SPEJLREFLEKS fotokamera
+                {% endif %}
+                <br>
+                {% if bpc.vidnonvid == "JA" %}
+                    Kan filme video
+                {% else %}
+                    Kan IKKE filme video
+                {% endif %}
+                <br>
+                Mærke: {{ bpc.brand }}
+                <br>
+                Model: {{ bpc.model }}
+                <br>
+                Beskrivelse: {{ bpc.description }}
+                <br>
+                <br>
+                Ejer: {{ bpc.owner }}
+                <br>
+                Kontaktnummer: {{ bpc.contact }}
+                <br>
+            {% endfor %}
+            <hr>
+        </div>
+        <div class="ninepercent"></div>
+    </div>
+    <div class="row">
+        <div class="ninepercent"></div>
+        <div class="eightypercent">
+            <h2>Lånte videokameraer</h2>
+            {% for bvc in borrowed_videocameras %}
+                <hr>
+                <br>
+                Opløsning: {{ bvc.resolution }}
+                <br>
+                Mærke: {{ bvc.brand }}
+                <br>
+                Model: {{ bvc.model }}
+                <br>
+                Beskrivelse: {{ bvc.description }}
+                <br>
+                <br>
+                Ejer: {{ bvc.owner }}
+                <br>
+                Kontaktnummer: {{ bvc.contact }}
+                <br>
+            {% endfor %}
+            <hr>
+        </div>
+        <div class="ninepercent"></div>
+    </div>
+    <div class="row">
+        <div class="ninepercent"></div>
+        <div class="eightypercent">
+            <h2>Lånte projektorer</h2>
+            {% for bp in borrowed_projectors %}
+                <hr>
+                <br>
+                Opløsning: {{ bp.resolution }}
+                <br>
+                Lysstyrke: {{ bp.lumen }} lumens
+                <br>
+                Mærke: {{ bp.brand }}
+                <br>
+                Model: {{ bp.model }}
+                <br>
+                Input 1: {{ bp.input1 }}
+                <br>
+                Input 2: {{ bp.input2 }}
+                <br>
+                Input 3: {{ bp.input3 }}
+                <br>
+                Beskrivelse: {{ bp.description }}
+                <br>
+                <br>
+                Ejer: {{ bp.owner }}
+                <br>
+                Kontaktnummer: {{ bp.contact }}
+                <br>
+            {% endfor %}
+            <hr>
+        </div>
+        <div class="ninepercent"></div>
+    </div>
+    <div class="row">
+        <div class="ninepercent"></div>
+        <div class="eightypercent">
+            <h2>Lånte TV/skærme</h2>
+            {% for btv in borrowed_tvs %}
+                <hr>
+                <br>
+                Opløsning: {{ btv.resolution }}
+                <br>
+                Størrelse: {{ btv.screensize }} tommer
+                <br>
+                Mærke: {{ btv.brand }}
+                <br>
+                Model: {{ btv.model }}
+                <br>
+                Input 1: {{ btv.input1 }}
+                <br>
+                Input 2: {{ btv.input2 }}
+                <br>
+                Input 3: {{ btv.input3 }}
+                <br>
+                Beskrivelse: {{ btv.description }}
+                <br>
+                <br>
+                Ejer: {{ btv.owner }}
+                <br>
+                Kontaktnummer: {{ btv.contact }}
+                <br>
+            {% endfor %}
+            <hr>
+        </div>
+        <div class="ninepercent"></div>
+    </div>
+    <div class="row">
+        <div class="ninepercent"></div>
+        <div class="eightypercent">
+            <h2>Lånte scenografier</h2>
+            {% for bsc in borrowed_scenography %}
+                <hr>
+                <br>
+                Type: {{ bsc.model }}
+                <br>
+                Beskrivelse: {{ bsc.description }}
+                <br>
+                {% if bsc.linktext %}
+                    Link til billede: <a href="http://{{ bsc.linktext }}">{{ bsc.linktext }}</a>
+                    <br>
+                {% endif %}
+                <br>
+                <br>
+                Ejer: {{ bsc.owner }}
+                <br>
+                Kontaktnummer: {{ bsc.contact }}
+                <br>
+            {% endfor %}
+            <hr>
+        </div>
+        <div class="ninepercent"></div>
+    </div>
+    <div class="row">
+        <div class="ninepercent"></div>
+        <div class="eightypercent">
+            <h2>Lånte kostumer</h2>
+            {% for bcs in borrowed_costumes %}
+                <hr>
+                <br>
+                Type: {{ bcs.model }}
+                <br>
+                Beskrivelse: {{ bcs.description }}
+                <br>
+                {% if bcs.linktext %}
+                    Link til billede: <a href="http://{{ bcs.linktext }}">{{ bcs.linktext }}</a>
+                    <br>
+                {% endif %}
+                <br>
+                <br>
+                Ejer: {{ bcs.owner }}
+                <br>
+                Kontaktnummer: {{ bcs.contact }}
+                <br>
+            {% endfor %}
+            <hr>
+        </div>
+        <div class="ninepercent"></div>
+    </div>
+{% endblock %}

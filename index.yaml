@@ -12,6 +12,11 @@ indexes:
 
 - kind: Lamp
   properties:
+  - name: borrower
+  - name: watt
+
+- kind: Lamp
+  properties:
   - name: owner
   - name: watt
 

@@ -30,6 +30,12 @@
                 Beskrivelse: {{ asp.description }}
                 <br>
                 <br>
+                {% if asp.borrower != "None" %}
+                    <div class="udlaant">p.t. OPTAGET</div>
+                {% else %}
+                    <div class="ledigt">p.t. LEDIG</div>
+                {% endif %}
+                <br>
                 Ejer: {{ asp.owner }}
                 <br>
                 Kontaktnummer: {{ asp.contact }}

@@ -22,6 +22,12 @@
                 Beskrivelse: {{ alm.description }}
                 <br>
                 <br>
+                {% if alm.borrower != "None" %}
+                    <div class="udlaant">p.t. OPTAGET</div>
+                {% else %}
+                    <div class="ledigt">p.t. LEDIG</div>
+                {% endif %}
+                <br>
                 Ejer: {{ alm.owner }}
                 <br>
                 Kontaktnummer: {{ alm.contact }}

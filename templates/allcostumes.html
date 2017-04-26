@@ -24,6 +24,12 @@
                 {% endif %}
                 <br>
                 <br>
+                {% if ac.borrower != "None" %}
+                    <div class="udlaant">p.t. OPTAGET</div>
+                {% else %}
+                    <div class="ledigt">p.t. LEDIG</div>
+                {% endif %}
+                <br>
                 Ejer: {{ ac.owner }}
                 <br>
                 Kontaktnummer: {{ ac.contact }}

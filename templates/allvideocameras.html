@@ -24,6 +24,12 @@
                 Beskrivelse: {{ avc.description }}
                 <br>
                 <br>
+                {% if avc.borrower != "None" %}
+                    <div class="udlaant">p.t. OPTAGET</div>
+                {% else %}
+                    <div class="ledigt">p.t. LEDIG</div>
+                {% endif %}
+                <br>
                 Ejer: {{ avc.owner }}
                 <br>
                 Kontaktnummer: {{ avc.contact }}

@@ -22,6 +22,12 @@
                 Beskrivelse: {{ ad.description }}
                 <br>
                 <br>
+                {% if ad.borrower != "None" %}
+                    <div class="udlaant">p.t. OPTAGET</div>
+                {% else %}
+                    <div class="ledigt">p.t. LEDIG</div>
+                {% endif %}
+                <br>
                 Ejer: {{ ad.owner }}
                 <br>
                 Kontaktnummer: {{ ad.contact }}

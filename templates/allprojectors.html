@@ -32,6 +32,12 @@
                 Beskrivelse: {{ ap.description }}
                 <br>
                 <br>
+                {% if ap.borrower != "None" %}
+                    <div class="udlaant">p.t. OPTAGET</div>
+                {% else %}
+                    <div class="ledigt">p.t. LEDIG</div>
+                {% endif %}
+                <br>
                 Ejer: {{ ap.owner }}
                 <br>
                 Kontaktnummer: {{ ap.contact }}

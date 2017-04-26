@@ -208,5 +208,12 @@ input[type=submit] {
     width: 9%;
 }
 
+.udlaant {
+    color: red;
+}
+
+.ledigt {
+    color: green;
+}
 
 

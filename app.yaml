@@ -1,4 +1,4 @@
-application: blog2-150413
+application: grejbanken2017
 version: 1
 runtime: python27
 api_version: 1
@@ -12,7 +12,7 @@ handlers:
   static_dir: pics
 
 - url: .*
-  script: blog.app
+  script: grejbanken2017.app
 
 libraries:
 - name: jinja2

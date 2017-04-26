@@ -12,8 +12,7 @@
         <div class="row">
             <div class="dropdown_menu_div">
                 <span>
-                    ME<br>
-                    NU
+                    <span class="menu">menu</span>
                 </span>
                 <div class="dropdown_content">
                     {% if user.name %}
@@ -33,7 +32,7 @@
             </div>
             <div class="user_menu_div">
                 {% if user %}
-                    Bruger:{{ user.name }}
+                    bruger:{{ user.name }}
                     <br>
                     <a href="/mypage/logout">[log ud]</a>
                 {% else %}

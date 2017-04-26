@@ -279,7 +279,7 @@ class Costumes(db.Model):
     booked = db.BooleanProperty()
 
 
-def blog_key(name = 'default'):
+def stg_key(name = 'default'):
     return db.Key.from_path('blogs', name)
 
 
@@ -322,7 +322,7 @@ class NewLamp(Handler):
             description = "Ingen beskrivelse er givet."
 
         if brand and model and watt:
-            l = Lamp(parent = blog_key(), owner = owner, contact = contact, brand = brand, lamptype = lamptype,
+            l = Lamp(parent = stg_key(), owner = owner, contact = contact, brand = brand, lamptype = lamptype,
                 lampmodeltype = lampmodeltype, model = model, watt = watt, description = description)
             l.put()
             time.sleep(0.1)
@@ -336,7 +336,7 @@ class NewLamp(Handler):
 class EditLamp(Handler):
     """class that opens a lamp for editing"""
     def get(self, lamp_id):
-        key = db.Key.from_path('Lamp', int(lamp_id), parent = blog_key())
+        key = db.Key.from_path('Lamp', int(lamp_id), parent = stg_key())
         ml = db.get(key)
 
         if not ml:
@@ -353,7 +353,7 @@ class EditLamp(Handler):
             return self.render('login.html', error=error)
 
     def post(self, lamp_id):
-        key = db.Key.from_path('Lamp', int(lamp_id), parent = blog_key())
+        key = db.Key.from_path('Lamp', int(lamp_id), parent = stg_key())
         ml = db.get(key)
 
         owner = self.user.name
@@ -396,7 +396,7 @@ class EditLamp(Handler):
 class DeleteLamp(Handler):
     """class for deleting a Lamp"""
     def get(self, lamp_id):
-        key = db.Key.from_path('Lamp', int(lamp_id), parent = blog_key())
+        key = db.Key.from_path('Lamp', int(lamp_id), parent = stg_key())
         ml = db.get(key)
 
         if self.user.name == ml.owner:
@@ -432,7 +432,7 @@ class NewCable(Handler):
             description = "Ingen beskrivelse er givet."
 
         if connection and length:
-            c = Cable(parent = blog_key(), owner = owner, contact = contact, connection = connection,
+            c = Cable(parent = stg_key(), owner = owner, contact = contact, connection = connection,
                 length = length, description = description)
             c.put()
             time.sleep(0.1)
@@ -446,7 +446,7 @@ class NewCable(Handler):
 class EditCable(Handler):
     """class that opens a Cable for editing"""
     def get(self, cable_id):
-        key = db.Key.from_path('Cable', int(cable_id), parent = blog_key())
+        key = db.Key.from_path('Cable', int(cable_id), parent = stg_key())
         mc = db.get(key)
 
         if not mc:
@@ -463,7 +463,7 @@ class EditCable(Handler):
             return self.render('login.html', error=error)
 
     def post(self, cable_id):
-        key = db.Key.from_path('Cable', int(cable_id), parent = blog_key())
+        key = db.Key.from_path('Cable', int(cable_id), parent = stg_key())
         mc = db.get(key)
 
         owner = self.user.name
@@ -498,7 +498,7 @@ class EditCable(Handler):
 class DeleteCable(Handler):
     """class for deleting a Cable"""
     def get(self, cable_id):
-        key = db.Key.from_path('Cable', int(cable_id), parent = blog_key())
+        key = db.Key.from_path('Cable', int(cable_id), parent = stg_key())
         mc = db.get(key)
 
         if self.user.name == mc.owner:
@@ -535,7 +535,7 @@ class NewDamper(Handler):
             description = "Ingen beskrivelse er givet."
 
         if brand and model:
-            d = Damper(parent = blog_key(), owner = owner, contact = contact, brand = brand, model = model,
+            d = Damper(parent = stg_key(), owner = owner, contact = contact, brand = brand, model = model,
                 description = description)
             d.put()
             time.sleep(0.1)
@@ -549,7 +549,7 @@ class NewDamper(Handler):
 class EditDamper(Handler):
     """class that opens a Damper for editing"""
     def get(self, damper_id):
-        key = db.Key.from_path('Damper', int(damper_id), parent = blog_key())
+        key = db.Key.from_path('Damper', int(damper_id), parent = stg_key())
         md = db.get(key)
 
         if not md:
@@ -566,7 +566,7 @@ class EditDamper(Handler):
             return self.render('login.html', error=error)
 
     def post(self, damper_id):
-        key = db.Key.from_path('Damper', int(damper_id), parent = blog_key())
+        key = db.Key.from_path('Damper', int(damper_id), parent = stg_key())
         md = db.get(key)
 
         owner = self.user.name
@@ -601,7 +601,7 @@ class EditDamper(Handler):
 class DeleteDamper(Handler):
     """class for deleting a Damper"""
     def get(self, damper_id):
-        key = db.Key.from_path('Damper', int(damper_id), parent = blog_key())
+        key = db.Key.from_path('Damper', int(damper_id), parent = stg_key())
         md = db.get(key)
 
         if self.user.name == md.owner:
@@ -638,7 +638,7 @@ class NewLightMixer(Handler):
             description = "Ingen beskrivelse er givet."
 
         if brand and model:
-            lm = LightMixer(parent = blog_key(), owner = owner, contact = contact, brand = brand, model = model,
+            lm = LightMixer(parent = stg_key(), owner = owner, contact = contact, brand = brand, model = model,
                 description = description)
             lm.put()
             time.sleep(0.1)
@@ -652,7 +652,7 @@ class NewLightMixer(Handler):
 class EditLightMixer(Handler):
     """class that opens a LightMixer for editing"""
     def get(self, lightmixer_id):
-        key = db.Key.from_path('LightMixer', int(lightmixer_id), parent = blog_key())
+        key = db.Key.from_path('LightMixer', int(lightmixer_id), parent = stg_key())
         mlm = db.get(key)
 
         if not mlm:
@@ -669,7 +669,7 @@ class EditLightMixer(Handler):
             return self.render('login.html', error=error)
 
     def post(self, lightmixer_id):
-        key = db.Key.from_path('LightMixer', int(lightmixer_id), parent = blog_key())
+        key = db.Key.from_path('LightMixer', int(lightmixer_id), parent = stg_key())
         mlm = db.get(key)
 
         owner = self.user.name
@@ -704,7 +704,7 @@ class EditLightMixer(Handler):
 class DeleteLightMixer(Handler):
     """class for deleting a LightMixer"""
     def get(self, lightmixer_id):
-        key = db.Key.from_path('LightMixer', int(lightmixer_id), parent = blog_key())
+        key = db.Key.from_path('LightMixer', int(lightmixer_id), parent = stg_key())
         mlm = db.get(key)
 
         if self.user.name == mlm.owner:
@@ -742,7 +742,7 @@ class NewSoundMixer(Handler):
             description = "Ingen beskrivelse er givet."
 
         if brand and model:
-            sm = SoundMixer(parent = blog_key(), owner = owner, contact = contact, brand = brand,
+            sm = SoundMixer(parent = stg_key(), owner = owner, contact = contact, brand = brand,
                  model = model, channels = channels, description = description)
             sm.put()
             time.sleep(0.1)
@@ -756,7 +756,7 @@ class NewSoundMixer(Handler):
 class EditSoundMixer(Handler):
     """class that opens a SoundMixer for editing"""
     def get(self, soundmixer_id):
-        key = db.Key.from_path('SoundMixer', int(soundmixer_id), parent = blog_key())
+        key = db.Key.from_path('SoundMixer', int(soundmixer_id), parent = stg_key())
         msm = db.get(key)
 
         if not msm:
@@ -773,7 +773,7 @@ class EditSoundMixer(Handler):
             return self.render('login.html', error=error)
 
     def post(self, soundmixer_id):
-        key = db.Key.from_path('SoundMixer', int(soundmixer_id), parent = blog_key())
+        key = db.Key.from_path('SoundMixer', int(soundmixer_id), parent = stg_key())
         msm = db.get(key)
 
         owner = self.user.name
@@ -809,7 +809,7 @@ class EditSoundMixer(Handler):
 class DeleteSoundMixer(Handler):
     """class for deleting a SoundMixer"""
     def get(self, soundmixer_id):
-        key = db.Key.from_path('SoundMixer', int(soundmixer_id), parent = blog_key())
+        key = db.Key.from_path('SoundMixer', int(soundmixer_id), parent = stg_key())
         msm = db.get(key)
 
         if self.user.name == msm.owner:
@@ -848,7 +848,7 @@ class NewSpeaker(Handler):
             description = "Ingen beskrivelse er givet."
 
         if brand and model:
-            sp = Speaker(parent = blog_key(), owner = owner, contact = contact, brand = brand, model = model,
+            sp = Speaker(parent = stg_key(), owner = owner, contact = contact, brand = brand, model = model,
                 inputs = inputs, active = active, description = description)
             sp.put()
             time.sleep(0.1)
@@ -862,7 +862,7 @@ class NewSpeaker(Handler):
 class EditSpeaker(Handler):
     """class that opens a Speaker for editing"""
     def get(self, speaker_id):
-        key = db.Key.from_path('Speaker', int(speaker_id), parent = blog_key())
+        key = db.Key.from_path('Speaker', int(speaker_id), parent = stg_key())
         msp = db.get(key)
 
         if not msp:
@@ -880,7 +880,7 @@ class EditSpeaker(Handler):
             return self.render('login.html', error=error)
 
     def post(self, speaker_id):
-        key = db.Key.from_path('Speaker', int(speaker_id), parent = blog_key())
+        key = db.Key.from_path('Speaker', int(speaker_id), parent = stg_key())
         msp = db.get(key)
 
         owner = self.user.name
@@ -919,7 +919,7 @@ class EditSpeaker(Handler):
 class DeleteSpeaker(Handler):
     """class for deleting a Speaker"""
     def get(self, speaker_id):
-        key = db.Key.from_path('Speaker', int(speaker_id), parent = blog_key())
+        key = db.Key.from_path('Speaker', int(speaker_id), parent = stg_key())
         msp = db.get(key)
 
         if self.user.name == msp.owner:
@@ -959,7 +959,7 @@ class NewPhotoCamera(Handler):
             description = "Ingen beskrivelse er givet."
 
         if brand and model:
-            pc = PhotoCamera(parent = blog_key(), owner = owner, contact = contact, brand = brand,
+            pc = PhotoCamera(parent = stg_key(), owner = owner, contact = contact, brand = brand,
                 model = model, digianal = digianal, slr = slr, vidnonvid = vidnonvid, description = description)
             pc.put()
             time.sleep(0.1)
@@ -973,7 +973,7 @@ class NewPhotoCamera(Handler):
 class EditPhotoCamera(Handler):
     """class that opens a PhotoCamera for editing"""
     def get(self, photocamera_id):
-        key = db.Key.from_path('PhotoCamera', int(photocamera_id), parent = blog_key())
+        key = db.Key.from_path('PhotoCamera', int(photocamera_id), parent = stg_key())
         mpc = db.get(key)
 
         if not mpc:
@@ -991,7 +991,7 @@ class EditPhotoCamera(Handler):
             return self.render('login.html', error=error)
 
     def post(self, photocamera_id):
-        key = db.Key.from_path('PhotoCamera', int(photocamera_id), parent = blog_key())
+        key = db.Key.from_path('PhotoCamera', int(photocamera_id), parent = stg_key())
         mpc = db.get(key)
 
         owner = self.user.name
@@ -1033,7 +1033,7 @@ class EditPhotoCamera(Handler):
 class DeletePhotoCamera(Handler):
     """class for deleting a PhotoCamera"""
     def get(self, photocamera_id):
-        key = db.Key.from_path('PhotoCamera', int(photocamera_id), parent = blog_key())
+        key = db.Key.from_path('PhotoCamera', int(photocamera_id), parent = stg_key())
         mpc = db.get(key)
 
         if self.user.name == mpc.owner:
@@ -1071,7 +1071,7 @@ class NewVideoCamera(Handler):
             description = "Ingen beskrivelse er givet."
 
         if brand and model:
-            vc = VideoCamera(parent = blog_key(), owner = owner, contact = contact, brand = brand,
+            vc = VideoCamera(parent = stg_key(), owner = owner, contact = contact, brand = brand,
                  model = model, resolution = resolution, description = description)
             vc.put()
             time.sleep(0.1)
@@ -1085,7 +1085,7 @@ class NewVideoCamera(Handler):
 class EditVideoCamera(Handler):
     """class that opens a VideoCamera for editing"""
     def get(self, videocamera_id):
-        key = db.Key.from_path('VideoCamera', int(videocamera_id), parent = blog_key())
+        key = db.Key.from_path('VideoCamera', int(videocamera_id), parent = stg_key())
         mvc = db.get(key)
 
         if not mvc:
@@ -1103,7 +1103,7 @@ class EditVideoCamera(Handler):
             return self.render('login.html', error=error)
 
     def post(self, videocamera_id):
-        key = db.Key.from_path('VideoCamera', int(videocamera_id), parent = blog_key())
+        key = db.Key.from_path('VideoCamera', int(videocamera_id), parent = stg_key())
         mvc = db.get(key)
 
         owner = self.user.name
@@ -1140,7 +1140,7 @@ class EditVideoCamera(Handler):
 class DeleteVideoCamera(Handler):
     """class for deleting a VideoCamera"""
     def get(self, videocamera_id):
-        key = db.Key.from_path('VideoCamera', int(videocamera_id), parent = blog_key())
+        key = db.Key.from_path('VideoCamera', int(videocamera_id), parent = stg_key())
         mvc = db.get(key)
 
         if self.user.name == mvc.owner:
@@ -1182,7 +1182,7 @@ class NewProjector(Handler):
             description = "Ingen beskrivelse er givet."
 
         if brand and model and owner and contact and resolution and lumen:
-            pc = Projector(parent = blog_key(), owner = owner, contact = contact, brand = brand,
+            pc = Projector(parent = stg_key(), owner = owner, contact = contact, brand = brand,
                     model = model, input1 = input1, input2 = input2, input3 = input3,
                     resolution = resolution, lumen = lumen, description = description)
             pc.put()
@@ -1197,7 +1197,7 @@ class NewProjector(Handler):
 class EditProjector(Handler):
     """class that opens a Projector for editing"""
     def get(self, projector_id):
-        key = db.Key.from_path('Projector', int(projector_id), parent = blog_key())
+        key = db.Key.from_path('Projector', int(projector_id), parent = stg_key())
         mp = db.get(key)
 
         if not mp:
@@ -1216,7 +1216,7 @@ class EditProjector(Handler):
             return self.render('login.html', error=error)
 
     def post(self, projector_id):
-        key = db.Key.from_path('Projector', int(projector_id), parent = blog_key())
+        key = db.Key.from_path('Projector', int(projector_id), parent = stg_key())
         mp = db.get(key)
 
         owner = self.user.name
@@ -1262,7 +1262,7 @@ class EditProjector(Handler):
 class DeleteProjector(Handler):
     """class for deleting a Projector"""
     def get(self, projector_id):
-        key = db.Key.from_path('Projector', int(projector_id), parent = blog_key())
+        key = db.Key.from_path('Projector', int(projector_id), parent = stg_key())
         mp = db.get(key)
 
         if self.user.name == mp.owner:
@@ -1304,7 +1304,7 @@ class NewTV(Handler):
             description = "Ingen beskrivelse er givet."
 
         if brand and model and owner and contact and resolution and screensize:
-            tv = TV(parent = blog_key(), owner = owner, contact = contact, brand = brand,
+            tv = TV(parent = stg_key(), owner = owner, contact = contact, brand = brand,
                     model = model, input1 = input1, input2 = input2, input3 = input3,
                     resolution = resolution, screensize = screensize, description = description)
             tv.put()
@@ -1319,7 +1319,7 @@ class NewTV(Handler):
 class EditTV(Handler):
     """class that opens a TV for editing"""
     def get(self, tv_id):
-        key = db.Key.from_path('TV', int(tv_id), parent = blog_key())
+        key = db.Key.from_path('TV', int(tv_id), parent = stg_key())
         mtv = db.get(key)
 
         if not mtv:
@@ -1338,7 +1338,7 @@ class EditTV(Handler):
             return self.render('login.html', error=error)
 
     def post(self, tv_id):
-        key = db.Key.from_path('TV', int(tv_id), parent = blog_key())
+        key = db.Key.from_path('TV', int(tv_id), parent = stg_key())
         mtv = db.get(key)
 
         owner = self.user.name
@@ -1384,7 +1384,7 @@ class EditTV(Handler):
 class DeleteTV(Handler):
     """class for deleting a TV"""
     def get(self, tv_id):
-        key = db.Key.from_path('TV', int(tv_id), parent = blog_key())
+        key = db.Key.from_path('TV', int(tv_id), parent = stg_key())
         mtv = db.get(key)
 
         if self.user.name == mtv.owner:
@@ -1421,7 +1421,7 @@ class NewScenography(Handler):
             description = "Ingen beskrivelse er givet."
 
         if model and description:
-            scy = Scenography(parent = blog_key(), owner = owner, contact = contact, model = model,
+            scy = Scenography(parent = stg_key(), owner = owner, contact = contact, model = model,
                 description = description, linktext = linktext)
             scy.put()
             time.sleep(0.1)
@@ -1435,7 +1435,7 @@ class NewScenography(Handler):
 class EditScenography(Handler):
     """class that opens a Scenography for editing"""
     def get(self, scenography_id):
-        key = db.Key.from_path('Scenography', int(scenography_id), parent = blog_key())
+        key = db.Key.from_path('Scenography', int(scenography_id), parent = stg_key())
         msc = db.get(key)
 
         if not msc:
@@ -1452,7 +1452,7 @@ class EditScenography(Handler):
             return self.render('login.html', error=error)
 
     def post(self, scenography_id):
-        key = db.Key.from_path('Scenography', int(scenography_id), parent = blog_key())
+        key = db.Key.from_path('Scenography', int(scenography_id), parent = stg_key())
         msc = db.get(key)
 
         owner = self.user.name
@@ -1487,7 +1487,7 @@ class EditScenography(Handler):
 class DeleteScenography(Handler):
     """class for deleting a Scenography"""
     def get(self, scenography_id):
-        key = db.Key.from_path('Scenography', int(scenography_id), parent = blog_key())
+        key = db.Key.from_path('Scenography', int(scenography_id), parent = stg_key())
         msc = db.get(key)
 
         if self.user.name == msc.owner:
@@ -1524,7 +1524,7 @@ class NewCostume(Handler):
             description = "Ingen beskrivelse er givet."
 
         if model and description:
-            cos = Costumes(parent = blog_key(), owner = owner, contact = contact, model = model,
+            cos = Costumes(parent = stg_key(), owner = owner, contact = contact, model = model,
                 description = description, linktext = linktext)
             cos.put()
             time.sleep(0.1)
@@ -1538,7 +1538,7 @@ class NewCostume(Handler):
 class EditCostume(Handler):
     """class that opens a Costume for editing"""
     def get(self, costume_id):
-        key = db.Key.from_path('Costumes', int(costume_id), parent = blog_key())
+        key = db.Key.from_path('Costumes', int(costume_id), parent = stg_key())
         mcs = db.get(key)
 
         if not mcs:
@@ -1555,7 +1555,7 @@ class EditCostume(Handler):
             return self.render('login.html', error=error)
 
     def post(self, costume_id):
-        key = db.Key.from_path('Costumes', int(costume_id), parent = blog_key())
+        key = db.Key.from_path('Costumes', int(costume_id), parent = stg_key())
         mcs = db.get(key)
 
         owner = self.user.name
@@ -1590,7 +1590,7 @@ class EditCostume(Handler):
 class DeleteCostume(Handler):
     """class for deleting a Costume"""
     def get(self, costume_id):
-        key = db.Key.from_path('Costumes', int(costume_id), parent = blog_key())
+        key = db.Key.from_path('Costumes', int(costume_id), parent = stg_key())
         mcs = db.get(key)
 
         if self.user.name == mcs.owner:
@@ -1802,7 +1802,6 @@ class MyProfile(Handler):
         self.render_profile()
 
 
-
 # The functions below check username, password and email for correct syntax in
 # the signup form
 
@@ -1848,8 +1847,8 @@ class SignUpHandler(Handler):
         self.email = self.request.get('email')
         self.phone = self.request.get('phone')
 
-        params = dict(suc = suc, username = self.username, firstname = self.firstname, surname = self.surname,
-                email = self.email, phone = self.phone)
+        params = dict(suc = suc, username = self.username, firstname = self.firstname,
+                surname = self.surname, email = self.email, phone = self.phone)
 
         if suc != "VELKOMMEN":
             params['signupcode_error'] = "Oprettelseskoden er ugyldig."
@@ -1963,7 +1962,6 @@ class Members(Handler):
 app = webapp2.WSGIApplication([('/', Entrance),
                                ('/mypage', MainPage),
                                ('/mypage/newthing', NewThing),
-                               ('/mypage/([0-9]+)', PostHandler),
                                ('/mypage/signup', Register),
                                ('/mypage/welcome', WelcomeHandler),
                                ('/mypage/login', Login),

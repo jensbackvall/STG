@@ -39,7 +39,7 @@ body {
     height: 40px;
     width: 22.5%;
     font-size: 14px;
-    text-align: center;
+    text-align: left;
 }
 
 .dropdown_content {
@@ -70,7 +70,7 @@ body {
     height: 40px;
     width: 22.5%;
     font-size: 14px;
-    text-align: center;
+    text-align: right;
 }
 
 a:link {
@@ -216,4 +216,8 @@ input[type=submit] {
     color: green;
 }
 
+.menu {
+    font-size: 2em;
+    padding: 5px;
+}
 

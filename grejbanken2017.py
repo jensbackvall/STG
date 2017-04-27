@@ -9,10 +9,13 @@ import hmac
 import hashlib
 import random
 import time
+import external
 
 from string import letters
-
 from google.appengine.ext import db
+from google.appengine.api import app_identity
+from google.appengine.api import mail
+
 
 template_dir = os.path.join(os.path.dirname(__file__), 'templates')
 jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir),
@@ -28,7 +31,6 @@ def render_str(template, **params):
 
 
 # functions for hashing and validating password hashing
-# oprettelseskoden er VELKOMMEN. Hvis den fornyes skal det ske på linie 1921
 
 secret = 'aaarfh-this_is-sooooo_secreteeeeeer-than_anything-ion'
 
@@ -1850,7 +1852,7 @@ class SignUpHandler(Handler):
         params = dict(suc = suc, username = self.username, firstname = self.firstname,
                 surname = self.surname, email = self.email, phone = self.phone)
 
-        if suc != "VELKOMMEN":
+        if suc != external.thesignupcode:
             params['signupcode_error'] = "Oprettelseskoden er ugyldig."
             error_msg = True
 
@@ -1901,6 +1903,26 @@ class Register(SignUpHandler):
             u = User.register(self.username, self.firstname, self.surname, self.password, self.email, self.phone)
             u.put()
 
+            cm = self.email
+            cun = self.username
+            cp = self.password
+            mail.send_mail(sender="Grejbanken <scenekunstgrej@gmail.com>",
+                            to=cm,
+                            subject="Velkommen til GREJBANKEN!",
+                            body="""Hej {},
+Velkommen som bruger af grejbanken.
+
+Dit brugernavn er: {}
+Dit password er: {}
+
+Ved spørgsmål, kontakt Jens Bäckvall på jensbackvall@t-nova.org.
+
+Gem venligst denne mail med dine loginoplysninger til fremtidig
+reference, da Grejbanken af sikkerhedsårsager ikke gemmer dit
+password nogle steder.
+
+Mvh Jens, på vegne af Grejbanken.""".format(cun, cun, cp))
+
             self.login(u)
             self.redirect('/mypage/welcome')
 
@@ -1919,7 +1941,7 @@ class Login(Handler):
             self.login(u)
             self.redirect('/mypage/welcome')
         else:
-            message = 'Invalid login'
+            message = 'Ugyldigt login'
             self.render('login.html', error = message)
 
 #class that handles logging out

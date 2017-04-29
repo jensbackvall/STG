@@ -9,6 +9,7 @@ import hmac
 import hashlib
 import random
 import time
+import datetime
 import external
 
 from string import letters
@@ -140,100 +141,67 @@ class User(db.Model):
             return u
 
 
-class Lamp(db.Model):
-    """class that creates the basic database structure for Lamp"""
+class Thing(db.Model):
+    """class that creates the basic database structure that all things have in common"""
     owner = db.StringProperty(required=True)
     contact = db.PhoneNumberProperty(required=True)
+    description = db.TextProperty()
+    borrower = db.StringProperty()
+    returndate = db.DateProperty()
+    booked = db.BooleanProperty()
+
+class Lamp(Thing, db.Model):
+    """class that creates the basic database structure for Lamp"""
     lamptype = db.StringProperty(required=True)
     lampmodeltype = db.StringProperty(required=True)
     brand = db.StringProperty(required=True)
     model = db.StringProperty(required=True)
     watt = db.IntegerProperty(required=True)
-    description = db.TextProperty()
-    borrower = db.StringProperty()
-    booked = db.BooleanProperty()
 
-class Cable(db.Model):
+class Cable(Thing, db.Model):
     """class that creates the basic database structure for Cable"""
-    owner = db.StringProperty(required=True)
-    contact = db.PhoneNumberProperty(required=True)
     connection = db.StringProperty(required=True)
     length = db.IntegerProperty(required=True)
-    description = db.TextProperty()
-    borrower = db.StringProperty()
-    booked = db.BooleanProperty()
 
-class Damper(db.Model):
+class Damper(Thing, db.Model):
     """class that creates the basic database structure for Damper"""
-    owner = db.StringProperty(required=True)
-    contact = db.PhoneNumberProperty(required=True)
     brand = db.StringProperty(required=True)
     model = db.StringProperty(required=True)
-    description = db.TextProperty()
-    borrower = db.StringProperty()
-    booked = db.BooleanProperty()
 
-class LightMixer(db.Model):
+class LightMixer(Thing, db.Model):
     """class that creates the basic database structure for Mixer"""
-    owner = db.StringProperty(required=True)
-    contact = db.PhoneNumberProperty(required=True)
     brand = db.StringProperty(required=True)
     model = db.StringProperty(required=True)
-    description = db.TextProperty()
-    borrower = db.StringProperty()
-    booked = db.BooleanProperty()
 
-class SoundMixer(db.Model):
+class SoundMixer(Thing, db.Model):
     """class that creates the basic database structure for Mixer"""
-    owner = db.StringProperty(required=True)
-    contact = db.PhoneNumberProperty(required=True)
     brand = db.StringProperty(required=True)
     model = db.StringProperty(required=True)
     channels = db.IntegerProperty()
-    description = db.TextProperty()
-    borrower = db.StringProperty()
-    booked = db.BooleanProperty()
 
-class Speaker(db.Model):
+class Speaker(Thing, db.Model):
     """class that creates the basic database structure for Speaker"""
-    owner = db.StringProperty(required=True)
-    contact = db.PhoneNumberProperty(required=True)
     brand = db.StringProperty(required=True)
     model = db.TextProperty(required=True)
     active = db.TextProperty(required=True)
     inputs = db.TextProperty(required=True)
-    description = db.TextProperty()
-    borrower = db.StringProperty()
-    booked = db.BooleanProperty()
 
-class PhotoCamera(db.Model):
+class PhotoCamera(Thing, db.Model):
     """class that creates the basic database structure for Camera"""
-    owner = db.StringProperty(required=True)
-    contact = db.PhoneNumberProperty(required=True)
     digianal = db.StringProperty(required=True)
     vidnonvid = db.StringProperty(required=True)
     slr = db.StringProperty(required=True)
     brand = db.StringProperty(required=True)
     model = db.TextProperty(required=True)
-    description = db.TextProperty()
-    borrower = db.StringProperty()
-    booked = db.BooleanProperty()
 
-class VideoCamera(db.Model):
+class VideoCamera(Thing, db.Model):
     """class that creates the basic database structure for Camera"""
-    owner = db.StringProperty(required=True)
-    contact = db.PhoneNumberProperty(required=True)
     brand = db.StringProperty(required=True)
     resolution = db.StringProperty(required=True)
     model = db.TextProperty(required=True)
-    description = db.TextProperty()
-    borrower = db.StringProperty()
-    booked = db.BooleanProperty()
 
-class Projector(db.Model):
+class Projector(Thing, db.Model):
     """class that creates the basic database structure for Projector"""
-    owner = db.StringProperty(required=True)
-    contact = db.PhoneNumberProperty(required=True)
     brand = db.StringProperty(required=True)
     resolution = db.StringProperty(required=True)
     lumen =db.IntegerProperty(required=True)
@@ -241,14 +209,9 @@ class Projector(db.Model):
     input1 = db.StringProperty()
     input2 = db.StringProperty()
     input3 = db.StringProperty()
-    description = db.TextProperty()
-    borrower = db.StringProperty()
-    booked = db.BooleanProperty()
 
-class TV(db.Model):
+class TV(Thing, db.Model):
     """class that creates the basic database structure for TV"""
-    owner = db.StringProperty(required=True)
-    contact = db.PhoneNumberProperty(required=True)
     brand = db.StringProperty(required=True)
     resolution = db.StringProperty(required=True)
     screensize = db.IntegerProperty(required=True)
@@ -256,29 +219,16 @@ class TV(db.Model):
     input1 = db.StringProperty()
     input2 = db.StringProperty()
     input3 = db.StringProperty()
-    description = db.TextProperty()
-    borrower = db.StringProperty()
-    booked = db.BooleanProperty()
 
-class Scenography(db.Model):
+class Scenography(Thing, db.Model):
     """class that creates the basic database structure for Scenography"""
-    owner = db.StringProperty(required=True)
-    contact = db.PhoneNumberProperty(required=True)
     model = db.TextProperty(required=True)
-    description = db.TextProperty(required=True)
     linktext = db.TextProperty()
-    borrower = db.StringProperty()
-    booked = db.BooleanProperty()
 
-class Costumes(db.Model):
+class Costumes(Thing, db.Model):
     """class that creates the basic database structure for Costume"""
-    owner = db.StringProperty(required=True)
-    contact = db.PhoneNumberProperty(required=True)
     model = db.TextProperty(required=True)
-    description = db.TextProperty(required=True)
     linktext = db.TextProperty()
-    borrower = db.StringProperty()
-    booked = db.BooleanProperty()
 
 
 def stg_key(name = 'default'):
@@ -1973,7 +1923,7 @@ class MainPage(Handler):
 class Members(Handler):
     """Class that renders a list of members"""
     def render_members(self):
-        members = db.GqlQuery("""SELECT * FROM User ORDER BY firstname ASC""")
+        members = db.GqlQuery("""SELECT * FROM User ORDER BY name ASC""")
         self.render("members.html", members = members)
 
     def get(self):

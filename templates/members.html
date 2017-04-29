@@ -12,11 +12,11 @@
         <hr>
         <div class="eightypercent">
             {% for m in members %}
+                Brugernavn: {{ m.name }}
+                <br>
                 Fornavn: {{ m.firstname }}
                 <br>
                 Efternavn: {{ m.surname }}
-                <br>
-                Brugernavn: {{ m.name }}
                 <br>
                 Email: {{ m.email }}
                 <br>

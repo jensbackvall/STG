@@ -16,5 +16,5 @@ STG is a simple webapp, running on Google App Engine, coded with Python using Ji
 <hr>
 
 Footnote: In it's current (beta) version, STG can only run in a standard browser window, but I will make it completely responsive,
-using Bootstrap, by autumn 2017.
+probably using Bootstrap, by autumn 2017.
 
